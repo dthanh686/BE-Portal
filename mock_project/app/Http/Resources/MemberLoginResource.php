@@ -21,6 +21,7 @@ class MemberLoginResource extends JsonResource
             'email' => $this->email,
             'avatar' => $this->avatar,
             'avatar_official' => $this->avatar_official,
+            'role' => $this->role->role_id ?? '',
         ];
     }
 }
