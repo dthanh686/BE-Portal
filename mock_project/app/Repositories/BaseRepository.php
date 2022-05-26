@@ -30,9 +30,9 @@ abstract class BaseRepository
         return $this->model->create($attribute);
     }
 
-    public function find($id)
+    public function findOrFail($id)
     {
-        return $this->model->find($id);
+        return $this->model->findOrFail($id);
     }
 
     public function update($id, $attribute)
@@ -46,5 +46,4 @@ abstract class BaseRepository
     {
         return $this->model->find($id)->delete();
     }
-
 }
