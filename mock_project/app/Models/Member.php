@@ -70,4 +70,10 @@ class Member extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function role()
+    {
+        return $this->hasOne(MemberRole::class, 'member_id');
+    }
+
 }

@@ -15,13 +15,12 @@ class MemberFactory extends Factory
      */
     public function definition()
     {
+        static $random = 100;
         return [
-            'full_name' => 'nam',
-            'email' => 'test'.$this->faker->unique()->numberBetween(100, 999).'@gmail.com',
-            'avatar' => $this->faker->image('storage/app/public/images', 480, 480, null, false),
+            'full_name' => $this->faker->lastName,
+            'email' => 'test' . $random++ . '@gmail.com',
             'created_by' => 1,
             'password' => Hash::make('123456'), // password
-            'remember_token' => Str::random(10),
         ];
     }
 }

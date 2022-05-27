@@ -9,7 +9,8 @@ use App\Services\MemberService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class MemberController extends Controller
+
+class MemberController extends BaseController
 {
     protected $service;
 
@@ -67,7 +68,17 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        return new MemberResource($this->service->findOrFail($id));
+        if ($id == auth()->user()->id) {
+
+            return new MemberResource($this->service->findOrFail($id));
+        } else {
+
+            return response()->json([
+                'status' => 'error',
+                'code' => JsonResponse::HTTP_UNAUTHORIZED,
+                'error' => 'Not ID',
+            ], JsonResponse::HTTP_UNAUTHORIZED);
+        }
     }
 
     /**
@@ -79,13 +90,23 @@ class MemberController extends Controller
      */
     public function update($id, MemberRequest $request)
     {
-        $this->service->updateMember($id, $request);
+        if ($id == auth()->user()->id) {
 
-        return response()->json([
-            'status' => 'success',
-            'code' => JsonResponse::HTTP_CREATED,
-            'message' => 'Update Success'
-        ], JsonResponse::HTTP_CREATED);
+            $this->service->updateMember($id, $request);
+
+            return response()->json([
+                'status' => 'success',
+                'code' => JsonResponse::HTTP_CREATED,
+                'message' => 'Update Success'
+            ], JsonResponse::HTTP_CREATED);
+        } else {
+
+            return response()->json([
+                'status' => 'error',
+                'code' => JsonResponse::HTTP_UNAUTHORIZED,
+                'error' => 'Not ID',
+            ], JsonResponse::HTTP_UNAUTHORIZED);
+        }
     }
 
     /** 
