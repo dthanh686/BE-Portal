@@ -20,8 +20,8 @@ class CreateShiftsTable extends Migration
             $table->string('check_out', 10);
             $table->float('work_time');
             $table->integer('lunch_break')->default('60');
-            $table->date('duration_start');
-            $table->date('duration_end');
+            $table->date('duration_start')->nullable();
+            $table->date('duration_end')->nullable();
             $table->text('note');
         });
     }

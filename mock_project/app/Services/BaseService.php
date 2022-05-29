@@ -25,6 +25,11 @@ abstract class BaseService
         return $this->repo->create($data);
     }
 
+    public function model()
+    {
+        return $this->repo->model();
+    }
+
     public function find($id)
     {
         return $this->repo->find($id);

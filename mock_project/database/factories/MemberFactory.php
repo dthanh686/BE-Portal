@@ -17,10 +17,12 @@ class MemberFactory extends Factory
         static $random = 100;
         return [
             'full_name' => $this->faker->lastName,
-//            'email' => 'test'.$this->faker->unique()->numberBetween(100, 999).'@gmail.com',
-            'email' => 'test'.$random++.'@gmail.com',
-            'created_by' => 1,
+            'member_code' => $this->faker->randomElement(['CTV-', 'D1-', 'D2-', 'D5-', 'G6-', 'HR-', 'ADMIN-', 'NS-']
+                ) . $random,
+            'email' => 'test' . $random++ . '@gmail.com',
+            'avatar' => 'http://127.0.0.1:8000/storage/avatar/avatar.png',
             'password' => Hash::make('123456'), // password
+            'created_by' => 1,
         ];
     }
 }

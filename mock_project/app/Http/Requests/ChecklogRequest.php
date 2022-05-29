@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MultiDateFormat;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-class LoginRequest extends FormRequest
+class ChecklogRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,30 +26,16 @@ class LoginRequest extends FormRequest
      *
      * @return array
      */
-    public function __construct(
-        array $query = [],
-        array $request = [],
-        array $attributes = [],
-        array $cookies = [],
-        array $files = [],
-        array $server = [],
-        $content = null
-    ) {
-        parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
-    }
-
     public function rules()
     {
-        if ($this->method() == 'POST') {
-            return [
-                'email' => 'required|email',
-                'password' => 'required',
-            ];
-        } else {
-            return [];
-        }
+        return [
+            'work_date' => [
+                'required',
+                new MultiDateFormat(),
+                'before:today',
+            ],
+        ];
     }
-
     public function failedValidation(Validator $validator)
     {
         $errors = (new ValidationException($validator))->errors();
