@@ -14,25 +14,17 @@ class AuthController extends BaseController
 {
     public function login(LoginRequest $request)
     {
-        if ($request->method() == 'POST') {
-            if (!$token = auth()->attempt($request->validated())) {
-                return response()->json(
-                    [
-                        'status' => 'error',
-                        'error' => 'Email or password is incorrect, please try again',
-                        'code' => JsonResponse::HTTP_UNAUTHORIZED,
-                    ],
-                    JsonResponse::HTTP_UNAUTHORIZED
-                );
-            }
-            return $this->createNewToken($token);
-        } else {
-            $mess = 'Method not allowed';
-
-            return $this->responeJson(1, 405, $mess);
+        if (!$token = auth()->attempt($request->validated())) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'error' => 'Email or password is incorrect, please try again',
+                    'code' => JsonResponse::HTTP_UNAUTHORIZED,
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
-
-
+        return $this->createNewToken($token);
     }
 
     public function logout(Request $request)
@@ -57,7 +49,7 @@ class AuthController extends BaseController
 
     public function changePassWord(ChangePassRequest $request, $memberId)
     {
-        if ($memberId == auth()->user()->id) {
+        if ($memberId == auth()->id()) {
             $member = Member::where('id', $memberId)->first();
             if (!Hash::check($request->old_password, $member->password)) {
                 $mess = [
