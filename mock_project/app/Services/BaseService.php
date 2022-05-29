@@ -20,17 +20,22 @@ abstract class BaseService
         );
     }
 
+    public function index()
+    {
+        return $this->repo->index();
+    }
+
     public function create($data = [])
     {
         return $this->repo->create($data);
     }
 
-    public function find($id)
+    public function findOrFail($id)
     {
-        return $this->repo->find($id);
+        return $this->repo->findOrFail($id);
     }
 
-    public function update ($id, $data)
+    public function update($id, $data)
     {
         return $this->repo->update($id, $data);
     }

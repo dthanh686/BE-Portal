@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
+
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::delete('/logout', [AuthController::class, 'logout']);
 Route::patch('/change-password/{id}', [AuthController::class, 'changePassWord']);
+
+Route::apiResource('members', \App\Http\Controllers\MemberController::class)->only('edit','update')->middleware('auth:api');

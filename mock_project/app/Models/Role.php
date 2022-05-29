@@ -9,7 +9,6 @@ class Role extends Model
 {
     use HasFactory;
 
-
     public function member()
     {
         return $this->belongsTo(Member::class, 'id');

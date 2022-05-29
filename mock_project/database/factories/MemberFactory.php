@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class MemberFactory extends Factory
 {
@@ -17,8 +18,7 @@ class MemberFactory extends Factory
         static $random = 100;
         return [
             'full_name' => $this->faker->lastName,
-//            'email' => 'test'.$this->faker->unique()->numberBetween(100, 999).'@gmail.com',
-            'email' => 'test'.$random++.'@gmail.com',
+            'email' => 'test' . $random++ . '@gmail.com',
             'created_by' => 1,
             'password' => Hash::make('123456'), // password
         ];
