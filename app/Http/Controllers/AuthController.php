@@ -15,8 +15,6 @@ class AuthController extends BaseController
 {
     public function login(LoginRequest $request)
     {
-        $count = DB::table('worksheets')->where('member_id' ,'=', 1)->count();
-        dd($count);
         if (!$token = auth()->attempt($request->validated())) {
             return response()->json(
                 [
