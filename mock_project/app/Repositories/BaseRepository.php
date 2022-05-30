@@ -25,6 +25,10 @@ abstract class BaseRepository
         return $this->model->get();
     }
 
+    public function model()
+    {
+        return $this->model;
+    }
     public function create($attribute)
     {
         return $this->model->create($attribute);
