@@ -21,7 +21,7 @@ class CreateNotificationsTable extends Migration
             $table->tinyInteger('status');
             $table->string('attachment', 255)->nullable();
             $table->bigInteger('created_by');
-            $table->json('published_to')->nullable();
+            $table->json('published_to');
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

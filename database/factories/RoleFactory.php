@@ -14,7 +14,9 @@ class RoleFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->unique()->randomElement(['Admin','Manager','Member']),
+            'created_at'=>$this->faker->dateTimeBetween('-1 day' ),
+            'updated_at'=>$this->faker->dateTimeBetween('-1 day' ),
         ];
     }
 }

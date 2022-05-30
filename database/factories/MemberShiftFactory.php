@@ -14,10 +14,11 @@ class MemberShiftFactory extends Factory
      */
     public function definition()
     {
-        $memberId = DB::table('members')->pluck('id');
+//        $memberId = DB::table('members')->pluck('id');
+        static $memberId = 1;
         $shiftId = DB::table('shifts')->pluck('id');
         return [
-            'member_id' => $this->faker->unique()->randomElement($memberId),
+            'member_id' => $memberId++,
             'shift_id' => $this->faker->randomElement($shiftId),
             'created_by' => 1,
         ];

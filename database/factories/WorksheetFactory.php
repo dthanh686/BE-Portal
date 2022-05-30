@@ -16,21 +16,23 @@ class WorksheetFactory extends Factory
     {
         $memberId = DB::table('members')->pluck('id');
         static $id = 1;
-        $day = 11;
-        $start = mktime(8, 30, 0, 5, $day, 2022);
-        $finish = mktime(17, 30, 0, 5, $day, 2022);
-        $checkin = mktime(8, random_int(5, 59), random_int(0, 59), 5, $day, 2022);
-        $checkout = mktime(17, random_int(20, 50), random_int(0, 59), 5, $day, 2022);
-        return [
-            'member_id' => $id++,
-            'work_date'=> '2022-05-'.$day,
-            'checkin' => date('Y-m-d H:i:s', $start),
-            'checkin_original' => date('Y-m-d H:i:s', $checkin),
-            'checkout'  => date('Y-m-d H:i:s', $finish),
-            'checkout_original'  => date('Y-m-d H:i:s', $checkout),
-            'late' => ($checkin > $start) ? date('H:i',($checkin-$start)) : null,
-            'early' => ($checkout < $finish) ? date('H:i',($finish-$checkout)) : null,
-            'in_office' => date('H:i', ($checkout-$checkin)),
-        ];
+        for ($day = 1; $day < 10; $day++) {
+            $start = mktime(8, 30, 0, 5, $day, 2022);
+            $finish = mktime(17, 30, 0, 5, $day, 2022);
+            $checkin = mktime(8, random_int(5, 59), random_int(0, 59), 5, $day, 2022);
+            $checkout = mktime(17, random_int(20, 50), random_int(0, 59), 5, $day, 2022);
+            return [
+                'member_id' => $id++,
+                'work_date'=> '2022-05-'.$day,
+                'checkin' => date('Y-m-d H:i:s', $start),
+                'checkin_original' => date('Y-m-d H:i:s', $checkin),
+                'checkout'  => date('Y-m-d H:i:s', $finish),
+                'checkout_original'  => date('Y-m-d H:i:s', $checkout),
+                'late' => ($checkin > $start) ? date('H:i',($checkin-$start)) : null,
+                'early' => ($checkout < $finish) ? date('H:i',($finish-$checkout)) : null,
+                'in_office' => date('H:i', ($checkout-$checkin)),
+            ];
+        }
+
     }
 }
