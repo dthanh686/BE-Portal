@@ -34,6 +34,17 @@ class AlertWorksheetsColumn extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('worksheets', function (Blueprint $table) {
+            $table->dropColumn('late');
+            $table->dropColumn('early');
+            $table->dropColumn('in_office');
+            $table->dropColumn('ot_time');
+            $table->dropColumn('work_time');
+            $table->dropColumn('lack');
+            $table->dropColumn('compensation');
+            $table->dropColumn('paid_leave');
+            $table->dropColumn('unpaid_leave');
+            $table->dropColumn('note');
+        });
     }
 }
