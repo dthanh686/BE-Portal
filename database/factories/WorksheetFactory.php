@@ -17,6 +17,8 @@ class WorksheetFactory extends Factory
         static $id = 0;
         static $day = 1;
         static $mouth = 1;
+        static $year = 2022;
+        $workDate = $year.'-'.$mouth.'-'.$day;
         if ($id == 101) {
             $id = 1;
         }
@@ -24,18 +26,20 @@ class WorksheetFactory extends Factory
             $day++;
         }
         if ($mouth % 2 != 0) {
-            if ($day == 31) {
+            if ($day == 32) {
                 $day = 1;
                 $mouth = $mouth+1;
             }
         } else {
             if ($mouth == 2) {
-                if ($day == 29) {
-                    $day = 1;
-                    $mouth= $mouth+1;
+                if ($day >= 29) {
+                    if (!checkdate($mouth, $day, $year)) {
+                        $day = 1;
+                        $mouth= $mouth+1;
+                    }
                 }
             } else {
-                if ($day == 30) {
+                if ($day == 31) {
                     $day = 1;
                     $mouth= $mouth+1;
                 }
@@ -49,7 +53,7 @@ class WorksheetFactory extends Factory
         $checkout = mktime(17, random_int(20, 50), random_int(0, 59), 5, $day, 2022);
         return [
             'member_id' => $id++ < 100 ? $id : $id=1,
-            'work_date' => '2022-' . $mouth . '-' . $day,
+            'work_date' => $workDate,
             'checkin' => date('Y-m-d H:i:s', $start),
             'checkin_original' => date('Y-m-d H:i:s', $checkin),
             'checkout' => date('Y-m-d H:i:s', $finish),

@@ -28,7 +28,7 @@ class AuthController extends BaseController
         return $this->createNewToken($token);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         auth()->logout();
         $mess = 'Member successfully signed out';
@@ -48,9 +48,10 @@ class AuthController extends BaseController
         ], JsonResponse::HTTP_OK);
     }
 
-    public function changePassWord(ChangePassRequest $request, $memberId)
+    public function changePassword(ChangePassRequest $request)
     {
-        if ($memberId == auth()->id()) {
+        if (auth()->id()) {
+            $memberId = auth()->id();
             $member = Member::where('id', $memberId)->first();
             if (!Hash::check($request->old_password, $member->password)) {
                 $mess = [

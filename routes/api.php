@@ -25,9 +25,9 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login')->name('login');
     Route::delete('/logout', 'logout');
-    Route::patch('/change-password/{id}', 'changePassWord');
+    Route::patch('/change-password', 'changePassword');
 });
 Route::apiResource('worksheet', WorksheetController::class);
-Route::apiResource('member-role', MemberRoleController::class)->only('show');
+Route::apiResource('member-role', MemberRoleController::class);
 Route::apiResource('time-log', ChecklogController::class);
 Route::apiResource('members', \App\Http\Controllers\MemberController::class)->only('edit','update')->middleware('auth:api');

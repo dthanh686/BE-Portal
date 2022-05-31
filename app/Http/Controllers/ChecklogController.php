@@ -19,11 +19,21 @@ class ChecklogController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(ChecklogRequest $request)
     {
-        //
+        if (auth()->id()) {
+            $memberId = auth()->id();
+            return $this->checklogService->showTimeLog($request, $memberId);
+        } else {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'error' => 'Unauthorized',
+                    'code' => 401,
+                ],401);
+        }
     }
 
     /**
@@ -53,18 +63,8 @@ class ChecklogController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(ChecklogRequest $request, $memberId)
+    public function show(ChecklogRequest $request,)
     {
-        if (auth()->id() == $memberId) {
-            return $this->checklogService->showTimeLog($request, $memberId);
-        } else {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'error' => 'Unauthorized',
-                    'code' => 401,
-                ],401);
-        }
 
     }
 
