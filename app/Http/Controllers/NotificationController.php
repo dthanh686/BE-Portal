@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MemberRequest;
-use App\Http\Resources\MemberResource;
-use App\Services\MemberService;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\NotificationResource;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
-
-class MemberController extends BaseController
+class NotificationController extends BaseController
 {
     protected $service;
 
-    public function __construct(MemberService $memberService)
+    public function __construct(NotificationService $notificationService)
     {
         parent::__construct();
-        $this->service = $memberService;
+        $this->service = $notificationService;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,9 +22,9 @@ class MemberController extends BaseController
      */
     public function index()
     {
-        return MemberResource::collection($this->service->index());
+        //
+        return NotificationResource::collection($this->service->index());
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -47,6 +43,7 @@ class MemberController extends BaseController
      */
     public function store(Request $request)
     {
+        //
     }
 
     /**
@@ -68,17 +65,7 @@ class MemberController extends BaseController
      */
     public function edit($id)
     {
-        if ($id == auth()->user()->id) {
-
-            return new MemberResource($this->service->findOrFail($id));
-        } else {
-
-            return response()->json([
-                'status' => 'error',
-                'code' => JsonResponse::HTTP_UNAUTHORIZED,
-                'error' => 'Not ID',
-            ], JsonResponse::HTTP_UNAUTHORIZED);
-        }
+        //
     }
 
     /**
@@ -88,28 +75,12 @@ class MemberController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, MemberRequest $request)
+    public function update(Request $request, $id)
     {
-        if ($id == auth()->user()->id) {
-
-            $this->service->updateMember($id, $request);
-
-            return response()->json([
-                'status' => 'success',
-                'code' => JsonResponse::HTTP_CREATED,
-                'message' => 'Update Success'
-            ], JsonResponse::HTTP_CREATED);
-        } else {
-
-            return response()->json([
-                'status' => 'error',
-                'code' => JsonResponse::HTTP_UNAUTHORIZED,
-                'error' => 'Not ID',
-            ], JsonResponse::HTTP_UNAUTHORIZED);
-        }
+        //
     }
 
-    /** 
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id

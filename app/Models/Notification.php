@@ -9,4 +9,9 @@ class Notification extends Model
 {
     use HasFactory;
     protected $table = 'notifications';
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class, 'created_by');
+    }
 }
