@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\MemberRole;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MemberLoginResource extends JsonResource
@@ -14,6 +15,7 @@ class MemberLoginResource extends JsonResource
      */
     public function toArray($request)
     {
+        $role = new MemberRoleResource(MemberRole::where('member_id', auth()->id())->first());
         return [
             'id' => $this->id,
             'member_code'=> $this->member_code,
@@ -21,7 +23,7 @@ class MemberLoginResource extends JsonResource
             'email' => $this->email,
             'avatar' => $this->avatar,
             'avatar_official' => $this->avatar_official,
-            'role' => $this->role->role_id ?? '',
+            'role' => $role->role->title ?? '',
         ];
     }
 }

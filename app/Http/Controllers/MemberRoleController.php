@@ -18,11 +18,21 @@ class MemberRoleController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        if (auth()->id()) {
+            $memberId = auth()->id();
+            return $this->memberRoleService->showRole($memberId);
+        } else {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'error' => 'Unauthorized',
+                    'code' => 401,
+                ],401);
+        }
     }
 
     /**
@@ -54,16 +64,7 @@ class MemberRoleController extends BaseController
      */
     public function show($id)
     {
-        if (auth()->id() == $id) {
-            return $this->memberRoleService->showRole($id);
-        } else {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'error' => 'Unauthorized',
-                    'code' => 401,
-                ],401);
-        }
+
     }
 
     /**
