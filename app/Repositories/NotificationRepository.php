@@ -10,4 +10,5 @@ class NotificationRepository extends BaseRepository
     {
         return Notification::class;
     }
+
 }

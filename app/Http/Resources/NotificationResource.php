@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\MemberResource;
 use App\Models\Member;
 
 class NotificationResource extends JsonResource
@@ -16,15 +15,13 @@ class NotificationResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return[
             'published_date' => $this->published_date,
             'subject' => $this->subject,
             'status' => $this->status,
             'attachment' => $this->attachment,
-            'created_by' => $this->member->full_name,
-            'published_to' => $this->published_to,
-            
+            'created_by' => $this->authorInfo->full_name,
+             'published_to' => $this->published_to,
         ];
     }
 }

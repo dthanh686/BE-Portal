@@ -54,7 +54,7 @@ class NotificationController extends BaseController
      */
     public function show($id)
     {
-        //
+        return new NotificationResource($this->service->findOrFail($id));
     }
 
     /**

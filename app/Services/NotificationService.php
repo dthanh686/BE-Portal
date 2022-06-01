@@ -11,5 +11,5 @@ class NotificationService extends BaseService
     {
         return NotificationRepository::class;
     }
-
+    
 }
