@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 //        \App\Models\MemberShift::factory(500)->create();
 //        \App\Models\Worksheet::factory(500)->create();
 //        \App\Models\Checklog::factory(500)->create();
-        // \App\Models\Notification::factory(10)->create();
-        \App\Models\DivisionMember::factory(10)->create();
+ //        \App\Models\Notification::factory(20)->create();
+        \App\Models\DivisionMember::factory(20)->create();
     }   
 }

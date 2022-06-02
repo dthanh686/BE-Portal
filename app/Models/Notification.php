@@ -25,11 +25,6 @@ class Notification extends Model
         return $this->belongsTo(Member::class, 'created_by');
     }
 
-    public function DivisionMember()
-    {
-        return $this->belongsToMany(DivisionMember::class, 'member_id', 'division_id');
-    }
-
     public function getPublishedToAttribute()
     {
         if ($this->attributes['published_to'] !== '["all"]') {

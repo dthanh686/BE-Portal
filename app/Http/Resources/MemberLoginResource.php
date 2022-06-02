@@ -14,14 +14,15 @@ class MemberLoginResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'member_code'=> $this->member_code,
-            'full_name' => $this->full_name,
-            'email' => $this->email,
-            'avatar' => $this->avatar,
-            'avatar_official' => $this->avatar_official,
-            'role' => $this->role->role_id ?? '',
-        ];
+        return parent::toArray($request);
+        // return [
+        //     'id' => $this->id,
+        //     'member_code'=> $this->member_code,
+        //     'full_name' => $this->full_name,
+        //     'email' => $this->email,
+        //     'avatar' => $this->avatar,
+        //     'avatar_official' => $this->avatar_official,
+        //     'role' => $this->role->role_id ?? '',
+        // ];
     }
 }

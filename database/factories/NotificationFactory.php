@@ -19,9 +19,9 @@ class NotificationFactory extends Factory
         return [
             'published_date' => $this->faker->date(),
             'subject' => $this->faker->name,
-            'status' => rand(0,3),
+            'status' => rand(0, 3),
             'attachment' => 'http://127.0.0.1:8000/storage/images/members/6294504f50c90-159726055_3884927424894828_3378186297290425618_n.jpg',
-            'published_to' => $this->faker->randomElement($divionId),
+            'published_to' => json_encode([$this->faker->randomElement($divionId)]),
             'created_by' => $this->faker->randomElement($createBy),
         ];
     }

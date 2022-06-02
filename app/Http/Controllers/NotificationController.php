@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\NotificationResource;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class NotificationController extends BaseController
 {
@@ -20,10 +21,19 @@ class NotificationController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        return NotificationResource::collection($this->service->index());
+        try {
+
+            return NotificationResource::collection($this->service->listNotifications($request));
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
     /**
      * Show the form for creating a new resource.
