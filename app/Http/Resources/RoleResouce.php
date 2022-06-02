@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MemberRoleResource extends JsonResource
+class RoleResouce extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,7 @@ class MemberRoleResource extends JsonResource
     public function toArray($request)
     {
 //        return parent::toArray($request);
-        return [
-            'role_id' => $this->role_id,
-            'role_name' => $this->role->title,
-        ];
+//        dd($this->title);
+        return $this->title;
     }
 }

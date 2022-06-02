@@ -15,15 +15,14 @@ class MemberLoginResource extends JsonResource
      */
     public function toArray($request)
     {
-        $role = new MemberRoleResource(MemberRole::where('member_id', auth()->id())->first());
-        return [
-            'id' => $this->id,
-            'member_code'=> $this->member_code,
-            'full_name' => $this->full_name,
-            'email' => $this->email,
-            'avatar' => $this->avatar,
-            'avatar_official' => $this->avatar_official,
-            'role' => $role->role->title ?? '',
-        ];
+        return parent::toArray($request);
+//        return [
+//            'id' => $this->id,
+//            'member_code'=> $this->member_code,
+//            'full_name' => $this->full_name,
+//            'email' => $this->email,
+//            'avatar' => $this->avatar,
+//            'roles' => $this->roles->first(),
+//        ];
     }
 }

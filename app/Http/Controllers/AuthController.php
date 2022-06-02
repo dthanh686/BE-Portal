@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePassRequest;
 use App\Http\Requests\LoginRequest;
-use App\Http\Resources\MemberLoginResource;
+use App\Http\Resources\MemberResource;
 use App\Models\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends BaseController
@@ -44,7 +43,7 @@ class AuthController extends BaseController
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'data' => new MemberLoginResource(auth()->user()),
+            'data' => new MemberResource(auth()->user()->load(['roles', 'divisions'])),
         ], JsonResponse::HTTP_OK);
     }
 
