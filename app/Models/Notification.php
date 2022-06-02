@@ -20,6 +20,10 @@ class Notification extends Model
         'published_to'
     ];
 
+    protected $attributes = [
+        'published_to' => 'all'
+    ];
+
     public function authorInfo()
     {
         return $this->belongsTo(Member::class, 'created_by');
@@ -35,4 +39,6 @@ class Notification extends Model
 
         return $this->attributes['published_to'];
     }
+
+   
 }

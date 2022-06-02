@@ -19,11 +19,21 @@ class WorksheetController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(WorksheetRequest $request)
     {
-        //
+        if (auth()->id()) {
+            $memberId = auth()->id();
+            return $this->worksheetService->showWorksheet($request, $memberId);
+        } else {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'error' => 'Unauthorized',
+                    'code' => 401,
+                ],401);
+        }
     }
 
     /**
@@ -56,17 +66,6 @@ class WorksheetController extends BaseController
      */
     public function show(WorksheetRequest $request, $memberId)
     {
-        if ($memberId == auth()->id()) {
-            return $this->worksheetService->showWorksheet($request, $memberId);
-        } else {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'error' => 'Unauthorized',
-                    'code' => 401,
-                ],401);
-        }
-
     }
 
     /**

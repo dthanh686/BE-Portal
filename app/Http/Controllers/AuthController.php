@@ -43,7 +43,7 @@ class AuthController extends BaseController
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'data' => new MemberLoginResource(auth()->user()->load(['roles','divisions'])),
+            'data' => new MemberLoginResource(auth()->user()),
         ], JsonResponse::HTTP_OK);
     }
 
