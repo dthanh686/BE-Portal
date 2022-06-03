@@ -18,16 +18,18 @@ class NotificationService extends BaseService
 
     public function listNotifications($request)
     {
-        $limit = $request->get('limit') ?? config('common.default_page_size');
-        $orderBy = $request->get('sort');
+        $perPage = $request->get('per_page') ?? config('common.default_page_size');
+
         $divisionId = Member::where('id', auth()->id())->with('divisions')->first();
         $divisionId = $divisionId->divisions->first()->id;
-        $query = Notification::whereJsonContains('published_to', [$divisionId]);
 
+        $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"]);
+
+        $orderBy = $request->get('sort');
         if ($orderBy) {
-            $query->orderBy('id', $orderBy);
+            $query->orderBy('published_date', $orderBy);
         }
 
-        return $query->paginate($limit);
+        return $query->paginate($perPage);
     }
 }
