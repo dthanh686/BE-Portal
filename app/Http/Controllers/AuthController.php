@@ -8,7 +8,6 @@ use App\Http\Resources\MemberLoginResource;
 use App\Models\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends BaseController
@@ -28,7 +27,7 @@ class AuthController extends BaseController
         return $this->createNewToken($token);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         auth()->logout();
         $mess = 'Member successfully signed out';
@@ -48,10 +47,9 @@ class AuthController extends BaseController
         ], JsonResponse::HTTP_OK);
     }
 
-    public function changePassword(ChangePassRequest $request)
+    public function changePassWord(ChangePassRequest $request, $memberId)
     {
-        if (auth()->id()) {
-            $memberId = auth()->id();
+        if ($memberId == auth()->id()) {
             $member = Member::where('id', $memberId)->first();
             if (!Hash::check($request->old_password, $member->password)) {
                 $mess = [

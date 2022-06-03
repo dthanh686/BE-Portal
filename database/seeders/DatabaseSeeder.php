@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\MemberShift::factory(100)->create();
         \App\Models\Worksheet::factory(1000)->create();
         \App\Models\Checklog::factory(1800)->create();
+        \App\Models\DivisionMember::factory(20)->create();
     }
 }
