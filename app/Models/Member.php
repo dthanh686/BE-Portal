@@ -59,6 +59,10 @@ class Member extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'pivot',
     ];
 
     public function getJWTIdentifier()
@@ -81,6 +85,8 @@ class Member extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Division::class,'division_member');
     }
 
-
-
+    public function shifts()
+    {
+        return $this->belongsToMany(Shift::class, 'member_shift');
+    }
 }

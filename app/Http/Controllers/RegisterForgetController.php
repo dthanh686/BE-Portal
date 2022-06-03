@@ -79,20 +79,7 @@ class RegisterForgetController extends BaseController
      */
     public function update(RegisterForgetRequest $request, $id)
     {
-        $result = $this->registerForgetService->edit($request,$id);
-        if ($result == 1) {
-            return response()->json([
-                'status' => 'success',
-                'code' => 201,
-                'message' => 'Update request success!'
-            ], 201);
-        } else {
-            return \response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'error' => 'Something went wrong or please check again!'
-            ], );
-        }
+        return $this->registerForgetService->edit($request,$id);
     }
 
     /**

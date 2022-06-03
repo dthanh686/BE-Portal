@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChecklogController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberRoleController;
 use App\Http\Controllers\RegisterForgetController;
 use App\Http\Controllers\WorksheetController;
@@ -32,4 +33,4 @@ Route::apiResource('worksheet', WorksheetController::class);
 Route::apiResource('member-role', MemberRoleController::class);
 Route::apiResource('time-log', ChecklogController::class);
 Route::apiResource('register-forget', RegisterForgetController::class);
-Route::apiResource('members', \App\Http\Controllers\MemberController::class)->only('edit','update')->middleware('auth:api');
+Route::apiResource('members', MemberController::class)->only('edit','update');

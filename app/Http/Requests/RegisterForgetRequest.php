@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MultiDateFormat;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -28,10 +29,13 @@ class RegisterForgetRequest extends FormRequest
     public function rules()
     {
         return [
-            'request_type' => 'regex:/^1$/',
-            'request_for_date' => 'date_format:Y-m-d',
-            'check_in' => 'date_format:H:i',
-            'check_out' => 'date_format:H:i',
+            'request_type' => 'required|regex:/^1$/',
+            'request_for_date' => [
+                'required',
+                new MultiDateFormat(),
+            ],
+            'check_in' => 'required|date_format:H:i',
+            'check_out' => 'required|date_format:H:i',
             'reason' => 'required'
         ];
     }

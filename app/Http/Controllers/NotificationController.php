@@ -2,31 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\WorksheetRequest;
-use App\Services\WorksheetService;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\NotificationResource;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
-class WorksheetController extends BaseController
+class NotificationController extends BaseController
 {
-    protected $worksheetService;
+    protected $service;
 
-    public function __construct(WorksheetService $worksheetService)
+    public function __construct(NotificationService $notificationService)
     {
         parent::__construct();
-        $this->worksheetService  = $worksheetService;
+        $this->service = $notificationService;
     }
-
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return \Illuminate\Http\Response
      */
-    public function index(WorksheetRequest $request)
+    public function index(Request $request)
     {
-        return $this->worksheetService->get($request);
-    }
+        try {
 
+            return NotificationResource::collection($this->service->listNotifications($request));
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -51,12 +59,12 @@ class WorksheetController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param $id
-     * @return void
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return $this->worksheetService->show($id);
+        return new NotificationResource($this->service->findOrFail($id));
     }
 
     /**
