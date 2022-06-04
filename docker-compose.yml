@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   web:
@@ -64,7 +64,7 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - mock1
- mailhog:
+  mailhog:
     image: mailhog/mailhog:latest
     container_name: mailhog
     ports:
