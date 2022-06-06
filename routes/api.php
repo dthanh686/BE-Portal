@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChecklogController;
-use App\Http\Controllers\MemberRoleController;
-use App\Http\Controllers\WorksheetController;
 use App\Http\Controllers\MemberController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MemberRoleController;
+use App\Http\Controllers\RegisterForgetController;
+use App\Http\Controllers\WorksheetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,5 +32,5 @@ Route::controller(AuthController::class)->group(function () {
 Route::apiResource('worksheet', WorksheetController::class);
 Route::apiResource('member-role', MemberRoleController::class);
 Route::apiResource('time-log', ChecklogController::class);
+Route::apiResource('register-forget', RegisterForgetController::class);
 Route::apiResource('members', MemberController::class)->only('edit','update');
-Route::apiResource('notification', NotificationController::class);

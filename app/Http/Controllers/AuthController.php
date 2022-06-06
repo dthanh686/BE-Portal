@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePassRequest;
 use App\Http\Requests\LoginRequest;
-use App\Http\Resources\MemberLoginResource;
+use App\Http\Resources\MemberResource;
 use App\Models\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,11 +43,11 @@ class AuthController extends BaseController
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'data' => new MemberLoginResource(auth()->user()),
+            'data' => new MemberResource(auth()->user()->load(['roles', 'divisions', 'shifts'])),
         ], JsonResponse::HTTP_OK);
     }
 
-    public function changePassWord(ChangePassRequest $request, $memberId)
+    public function changePassword(ChangePassRequest $request, $memberId)
     {
         if ($memberId == auth()->id()) {
             $member = Member::where('id', $memberId)->first();

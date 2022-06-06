@@ -2,29 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\WorksheetRequest;
-use App\Services\WorksheetService;
-use Illuminate\Http\JsonResponse;
+use App\Http\Requests\RequestRequest;
 use Illuminate\Http\Request;
 
-class WorksheetController extends BaseController
+class RequestController extends Controller
 {
-    protected $worksheetService;
-
-    public function __construct(WorksheetService $worksheetService)
-    {
-        parent::__construct();
-        $this->worksheetService  = $worksheetService;
-    }
-
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return \Illuminate\Http\Response
      */
-    public function index(WorksheetRequest $request)
+    public function index()
     {
-        return $this->worksheetService->get($request);
+        //
     }
 
     /**
@@ -40,23 +30,23 @@ class WorksheetController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param RequestRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RequestRequest $request)
     {
-        //
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param $id
-     * @return void
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return $this->worksheetService->show($id);
+        //
     }
 
     /**

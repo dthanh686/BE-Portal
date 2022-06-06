@@ -11,4 +11,11 @@ class Division extends Model
 
     protected $table = 'divisions';
 
+    public $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'pivot',
+    ];
+
 }
