@@ -10,4 +10,4 @@ RUN docker-php-ext-install pdo_mysql
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
