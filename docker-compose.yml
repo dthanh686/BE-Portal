@@ -5,9 +5,9 @@ services:
     app:
         build: .
         container_name: php-app
-        working_dir: /var/www/html
+        working_dir: /var/www/app
         volumes:
-            - ./:/var/www/html
+            - ./:/var/www/app
         networks:
             - app-network
     # Nginx service
@@ -17,7 +17,7 @@ services:
         ports:
             - 80:80
         volumes:
-            - ./:/var/www/html
+            - ./:/var/www/app
             - ./nginx/conf.d/:/etc/nginx/conf.d/
         networks:
             - app-network
