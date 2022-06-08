@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\MultiDateFormat;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
 class RegisterForgetRequest extends FormRequest
@@ -28,16 +26,23 @@ class RegisterForgetRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'request_type' => 'required|regex:/^1$/',
-            'request_for_date' => [
-                'required',
-                new MultiDateFormat(),
-            ],
-            'check_in' => 'required|date_format:H:i',
-            'check_out' => 'required|date_format:H:i',
-            'reason' => 'required'
-        ];
+        if ($this->method() == 'POST' || $this->method() == 'PUT') {
+            return [
+                'request_type' => 'required|regex:/^1$/',
+                'request_for_date' => 'required|date_format:Y-m-d',
+                'check_in' => 'required|date_format:H:i',
+                'check_out' => 'required|date_format:H:i',
+                'reason' => 'required',
+            ];
+        }
+
+        if ($this->method() == 'GET') {
+            return [
+                'request_for_date' => 'required|date_format:Y-m-d',
+            ];
+        }
+
+
     }
 
     public function failedValidation(Validator $validator)
@@ -47,11 +52,9 @@ class RegisterForgetRequest extends FormRequest
             response()->json(
                 [
                     'status' => 'error',
-                    'code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
+                    'code' => 422,
                     'error' => $errors,
-                ],
-                JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-            )
+                ], 422)
         );
     }
 }

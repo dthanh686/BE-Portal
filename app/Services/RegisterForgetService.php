@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\MemberRequestQuota;
-use App\Models\Worksheet;
 use App\Repositories\RequestRepository;
 
 class RegisterForgetService extends BaseService
@@ -65,17 +64,20 @@ class RegisterForgetService extends BaseService
         }
     }
 
-    public function show($id)
+    public function show($request)
     {
-        $request = $this->findOrFail($id);
-        if ($request->member_id == auth()->id()) {
-            return $request;
+        $requestForDate = trim($request->request_for_date);
+        $registerForget = $this->model()->where('member_id', auth()->id())
+            ->where('request_type', 1)
+            ->where('request_for_date', $requestForDate);
+        if ($registerForget->exists()) {
+            return $registerForget->first();
         } else {
             return response()->json([
                 'status' => false,
-                'code' => 403,
-                'error' => 'The request invalid'
-            ], 403);
+                'code' => 404,
+                'error' => 'This request is not available yet'
+            ], 404);
         }
     }
 
