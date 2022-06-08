@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Member;
 use App\Repositories\MemberRepository;
 use App\Services\BaseService;
 

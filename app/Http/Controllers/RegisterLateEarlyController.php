@@ -2,47 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\NotificationResource;
-use App\Models\Member;
-use App\Services\NotificationService;
+use App\Services\RegisterLateEarlyService;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
-class NotificationController extends BaseController
+class RegisterLateEarlyController extends BaseController
 {
-    protected $service;
+    protected $registerLateEarlyService;
 
-    public function __construct(NotificationService $notificationService)
+    public function __construct(RegisterLateEarlyService $registerLateEarlyService)
     {
         parent::__construct();
-        $this->service = $notificationService;
+        $this->registerLateEarlyService  = $registerLateEarlyService;
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        try {
-            return NotificationResource::collection($this->service->listNotifications($request));
-        } catch (\Exception $e) {
-
-            return response()->json([
-                'status' => 'error',
-                'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => $e->getMessage(),
-            ]);
-        }
+        //
     }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
     }
 
     /**
@@ -53,7 +42,7 @@ class NotificationController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        return $this->RegisterLateEarlyService->store($request);
     }
 
     /**
@@ -64,7 +53,7 @@ class NotificationController extends BaseController
      */
     public function show($id)
     {
-        return $this->service->view($id);
+        //
     }
 
     /**
