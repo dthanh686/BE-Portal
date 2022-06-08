@@ -43,12 +43,27 @@ class WorksheetService extends BaseService
         )->withQueryString();
     }
 
-    public function show($id)
+    public function getById($id)
     {
         $worksheet = $this->findOrFail($id);
 
         if ($worksheet->member_id == auth()->id()) {
             return $worksheet;
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+                'error' => 'Request worksheet invalid!'
+            ],403);
+        }
+    }
+
+    public function getByDate($workDate)
+    {
+
+        $worksheet = $this->model()->where('member_id', auth()->id())->where('work_date', $workDate);
+        if ($worksheet->exists()) {
+            return $worksheet->first();
         } else {
             return response()->json([
                 'status' => false,

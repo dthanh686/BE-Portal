@@ -6,6 +6,7 @@ use App\Http\Requests\WorksheetRequest;
 use App\Services\WorksheetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class WorksheetController extends BaseController
 {
@@ -14,82 +15,45 @@ class WorksheetController extends BaseController
     public function __construct(WorksheetService $worksheetService)
     {
         parent::__construct();
-        $this->worksheetService  = $worksheetService;
+        $this->worksheetService = $worksheetService;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
     public function index(WorksheetRequest $request)
     {
         return $this->worksheetService->get($request);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function getById(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|numeric',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
+                    'error' => $validator->errors(),
+                ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+        return $this->worksheetService->getById($request->id);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function getByDate(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param $id
-     * @return void
-     */
-    public function show($id)
-    {
-        return $this->worksheetService->show($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $validator = Validator::make($request->all(), [
+            'work_date' => 'required|date_format:Y-m-d',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
+                    'error' => $validator->errors(),
+                ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+        return $this->worksheetService->getByDate($request->work_date);
     }
 }
