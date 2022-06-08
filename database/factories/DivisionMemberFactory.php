@@ -15,9 +15,8 @@ class DivisionMemberFactory extends Factory
     public function definition()
     {
         $divison = DB::table('divisions')->pluck('id');
-        $member = DB::table('members')->pluck('id');
-            return [
-                'member_id' => $this->faker->randomElement($member),
+        return [
+                'member_id' => $this->faker->unique()->randomElement(DB::table('members')->pluck('id')),
                 'division_id' => $this->faker->randomElement($divison),
             ];
     }

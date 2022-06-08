@@ -40,5 +40,5 @@ class Notification extends Model
         return $this->attributes['published_to'];
     }
 
-   
+
 }

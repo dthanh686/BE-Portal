@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\WorksheetRequest;
-use App\Services\WorksheetService;
-use Illuminate\Http\JsonResponse;
+use App\Http\Requests\RegisterForgetRequest;
+use App\Services\RegisterForgetService;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
-class WorksheetController extends BaseController
+class RegisterForgetController extends BaseController
 {
-    protected $worksheetService;
+    protected $registerForgetService;
 
-    public function __construct(WorksheetService $worksheetService)
+    public function __construct(RegisterForgetService $registerForgetService)
     {
         parent::__construct();
-        $this->worksheetService  = $worksheetService;
+        $this->registerForgetService = $registerForgetService;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return \Illuminate\Http\Response
      */
-    public function index(WorksheetRequest $request)
+    public function index()
     {
-        return $this->worksheetService->get($request);
+        //
     }
 
     /**
@@ -43,20 +43,20 @@ class WorksheetController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegisterForgetRequest $request)
     {
-        //
+        return $this->registerForgetService->store($request);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param $id
-     * @return void
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return $this->worksheetService->show($id);
+        return $this->registerForgetService->show($id);
     }
 
     /**
@@ -73,13 +73,13 @@ class WorksheetController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param RegisterForgetRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(RegisterForgetRequest $request, $id)
     {
-        //
+        return $this->registerForgetService->edit($request,$id);
     }
 
     /**
