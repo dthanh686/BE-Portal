@@ -1,131 +1,27 @@
 version: "3.8"
-
 services:
-  web:
-    build:
-      context: ./.envs
-      dockerfile: nginx/Dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    container_name: nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - .:/var/www/app:delegated
-      - ./.envs/nginx/certs:/etc/nginx/certs
-    restart: on-failure
-    depends_on:
-      - app
-      - redis
-      - mysql
-      - mailhog
-    networks:
-      - mock1
 
-  app:
-    build:
-      context: ./.envs
-      dockerfile: php/Dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    container_name: app
-    image: vnext-php:v1.0
-    volumes:
-      - .:/var/www/app:delegated
-    expose:
-      - "9000"
-    networks:
-      - mock1
-
-  redis:
-    image: redis:alpine
-    container_name: redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    networks:
-      - mock1
-
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    restart: on-failure
-    environment:
-      - MYSQL_DATABASE=homestead
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_USER=homestead
-      - MYSQL_PASSWORD=secret
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - mock1
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: mailhog
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-    networks:
-      - mock1
-
-  composer:
-    build:
-      context: ./.envs
-      dockerfile: php/composer.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    container_name: composer
-    volumes:
-      - .:/var/www/app
-    working_dir: /var/www/app
-    depends_on:
-      - app
-    entrypoint: [ 'composer' ]
-    user: laravel
-    networks:
-      - mock1
-
-  npm:
-    image: node:16.15
-    container_name: npm
-    volumes:
-      - .:/var/www/app
-    depends_on:
-      - app
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-    working_dir: /var/www/app
-    entrypoint: [ 'npm' ]
-    networks:
-      - mock1
-
-  artisan:
-    build:
-      context: ./.envs
-      dockerfile: php/Dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    container_name: artisan
-    volumes:
-      - .:/var/www/app:delegated
-    depends_on:
-      - mysql
-    working_dir: /var/www/app
-    entrypoint: [ 'php', '/var/www/app/artisan' ]
-    user: laravel
-    networks:
-      - mock1
+    # PHP service
+    app:
+        build: .
+        container_name: php-app
+        working_dir: /var/www/app
+        volumes:
+            - ./:/var/www/app
+        networks:
+            - app-network
+    # Nginx service
+    nginx:
+        image: nginx:alpine
+        container_name: php-nginx
+        ports:
+            - 80:80
+        volumes:
+            - ./:/var/www/app
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - app-network
 
 networks:
-  mock1:
-
-volumes:
-  mysql_data:
+    app-network:
+        driver: bridge

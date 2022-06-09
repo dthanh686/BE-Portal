@@ -47,9 +47,16 @@ class AuthController extends BaseController
         ], JsonResponse::HTTP_OK);
     }
 
-    public function changePassword(ChangePassRequest $request, $memberId)
+    public function refresh() {
+        return $this->createNewToken(auth()->refresh());
+    }
+
+
+
+    public function changePassword(ChangePassRequest $request)
     {
-        if ($memberId == auth()->id()) {
+        $memberId = auth()->id();
+        if ($memberId) {
             $member = Member::where('id', $memberId)->first();
             if (!Hash::check($request->old_password, $member->password)) {
                 $mess = [
