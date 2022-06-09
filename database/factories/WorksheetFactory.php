@@ -54,16 +54,12 @@ class WorksheetFactory extends Factory
         $finish = mktime(17, 30, 0, $month, $day, $year);
         $inOffice = date('H:i', (strtotime($checkOUT) - strtotime($checkIN)));
         $worktime =  (date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? date('H:i', strtotime("-1 hour", (strtotime($checkOUT) - strtotime($checkIN)))) : null;
-        $timework =  date('H:i', strtotime('-1 hour', ($finish-$start)));
         $timeworkOffice =  date('H:i', ($finish-$start));
-        $timeworkOT =  date('H:i', strtotime('+1 hour', ($finish-$start)));
         $late = strtotime($checkIN) > $start ? strtotime($checkIN) - $start : 0;
         $early = strtotime($checkOUT) < $finish ? $finish - strtotime($checkOUT) : 0;
         $lack = $late + $early;
         $otTime = strtotime($checkOUT) - $ot;
         $compensation = strtotime($inOffice) - strtotime($timeworkOffice);
-//        dd($late);
-
         return [
             'member_id' => $memberId,
             'work_date' => $workDate,
