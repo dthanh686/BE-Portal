@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterLateEarlyRequest;
 use App\Services\RegisterLateEarlyService;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class RegisterLateEarlyController extends BaseController
@@ -40,9 +40,9 @@ class RegisterLateEarlyController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegisterLateEarlyRequest $request)
     {
-        return $this->RegisterLateEarlyService->store($request);
+        return $this->registerLateEarlyService->store($request);
     }
 
     /**
@@ -53,7 +53,7 @@ class RegisterLateEarlyController extends BaseController
      */
     public function show($id)
     {
-        //
+        return $this->registerLateEarlyService->show($id);
     }
 
     /**
@@ -74,9 +74,9 @@ class RegisterLateEarlyController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RegisterLateEarlyRequest $request, $id)
     {
-        //
+        return $this->registerLateEarlyService->edit($request,$id);
     }
 
     /**

@@ -17,6 +17,8 @@ class Request extends Model
         'check_out',
         'reason',
         'status',
-        'request_ot_time'
+        'request_ot_time',
+        'compensation_date',
+        'compensation_time'
     ];
 }
