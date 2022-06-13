@@ -66,9 +66,10 @@ class MemberController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        if ($id == auth()->user()->id) {
+        $id = auth()->id();
+        if ($id) {
 
             return new MemberResource($this->service->findOrFail($id));
         } else {
@@ -76,7 +77,7 @@ class MemberController extends BaseController
             return response()->json([
                 'status' => 'error',
                 'code' => JsonResponse::HTTP_UNAUTHORIZED,
-                'error' => 'Not ID',
+                'error' => 'This request is not valid',
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
     }
@@ -88,9 +89,10 @@ class MemberController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, MemberRequest $request)
+    public function update(MemberRequest $request)
     {
-        if ($id == auth()->user()->id) {
+        $id = auth()->id();
+        if ($id) {
 
             $this->service->updateMember($id, $request);
 
@@ -104,7 +106,7 @@ class MemberController extends BaseController
             return response()->json([
                 'status' => 'error',
                 'code' => JsonResponse::HTTP_UNAUTHORIZED,
-                'error' => 'Not ID',
+                'error' => 'This request is not valid',
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
     }
