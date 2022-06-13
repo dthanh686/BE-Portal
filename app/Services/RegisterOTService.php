@@ -26,15 +26,6 @@ class RegisterOTService extends BaseService
 
         $workSheet = Worksheet::where('member_id', Auth::id())->where('work_date', $requestForDate)->first();
         $actualOverTime = $workSheet->ot_time;
-        // if (strtotime($actualOverTime) > strtotime($TimeOT)) {
-        //     $actualOT = gmdate("H:i", (strtotime($inOffice) - strtotime('10:00')));
-        // } else {
-        //     return response()->json([
-        //         'status' => false,
-        //         'code' => 400,
-        //         'error' => 'Working time less than 10 hours'
-        //     ], 400);
-        // }
 
         $registerOT = $this->model()->where('member_id', auth()->id())
             ->where('request_for_date', $requestForDate)

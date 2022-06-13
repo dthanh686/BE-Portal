@@ -58,7 +58,13 @@ Route::prefix('register-forget')
         Route::get('/show', 'show');
         Route::put('/update/{id}', 'update');
     });
-Route::apiResource('members', MemberController::class)->only('edit','update');
+Route::prefix('members')
+    ->controller(MemberController::class)
+    ->group(function () {
+        Route::get('/edit', 'edit');
+        Route::put('/update', 'update');
+    });
+
 Route::apiResource('notification', NotificationController::class)->only('index','show');
 Route::prefix('register-late-early')
     ->controller(RegisterLateEarlyController::class)
