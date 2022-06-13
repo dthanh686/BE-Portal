@@ -25,16 +25,16 @@ class RegisterOTService extends BaseService
         $TimeOT = $request->request_ot_time;
 
         $workSheet = Worksheet::where('member_id', Auth::id())->where('work_date', $requestForDate)->first();
-        $inOffice = $workSheet->in_office;
-        if (strtotime($inOffice) > strtotime('10:00')) {
-            $actualOT = gmdate("H:i", (strtotime($inOffice) - strtotime('10:00')));
-        } else {
-            return response()->json([
-                'status' => false,
-                'code' => 400,
-                'error' => 'Working time less than 10 hours'
-            ], 400);
-        }
+        $actualOverTime = $workSheet->ot_time;
+        // if (strtotime($actualOverTime) > strtotime($TimeOT)) {
+        //     $actualOT = gmdate("H:i", (strtotime($inOffice) - strtotime('10:00')));
+        // } else {
+        //     return response()->json([
+        //         'status' => false,
+        //         'code' => 400,
+        //         'error' => 'Working time less than 10 hours'
+        //     ], 400);
+        // }
 
         $registerOT = $this->model()->where('member_id', auth()->id())
             ->where('request_for_date', $requestForDate)
@@ -47,7 +47,7 @@ class RegisterOTService extends BaseService
                 'code' => 400,
                 'error' => 'Request already exists'
             ], 400);
-        } elseif ($request->request_ot_time > $actualOT) {
+        } elseif (strtotime($actualOverTime) < strtotime($TimeOT)) {
             return response()->json([
                 'status' => false,
                 'code' => 400,
@@ -73,17 +73,23 @@ class RegisterOTService extends BaseService
         }
     }
 
-    public function show($id)
+    public function show($request)
     {
-        $request = $this->findOrFail($id);
-        if ($request->member_id == auth()->id()) {
-            return $request;
+        $requestForDate = trim($request->request_for_date);
+        $registerOT = $this->model()->where('member_id', auth()->id())
+            ->where('request_type', 5)
+            ->where('request_for_date', $requestForDate)->first();
+
+        if ($registerOT) {
+
+            return $registerOT;
         } else {
+
             return response()->json([
                 'status' => false,
-                'code' => 403,
-                'error' => 'The request invalid'
-            ], 403);
+                'code' => 200,
+                'error' => 'This request is not available yet'
+            ], 200);
         }
     }
 
@@ -99,18 +105,9 @@ class RegisterOTService extends BaseService
             $TimeOT = $request->request_ot_time;
 
             $workSheet = Worksheet::where('member_id', Auth::id())->where('work_date', $requestForDate)->first();
-            $inOffice = $workSheet->in_office;
-            if (strtotime($inOffice) > strtotime('10:00')) {
-                $actualOT = gmdate("H:i", (strtotime($inOffice) - strtotime('10:00')));
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'code' => 400,
-                    'error' => 'Working time less than 10 hours'
-                ], 400);
-            }
+            $actualOverTime = $workSheet->ot_time;
 
-            if ($request->request_ot_time > $actualOT) {
+            if (strtotime($actualOverTime) < strtotime($TimeOT)) {
                 return response()->json([
                     'status' => false,
                     'code' => 400,

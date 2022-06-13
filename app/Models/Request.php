@@ -20,6 +20,8 @@ class Request extends Model
         'reason',
         'status',
         'request_ot_time',
+        'compensation_date',
+        'compensation_time',
         'leave_all_day',
         'leave_start',
         'leave_end',

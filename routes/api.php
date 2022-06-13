@@ -3,14 +3,15 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChecklogController;
-use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberRoleController;
 use App\Http\Controllers\RegisterForgetController;
 use App\Http\Controllers\RegisterLeaveController;
 use App\Http\Controllers\RegisterOTController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\WorksheetController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RegisterLateEarlyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,8 +59,21 @@ Route::prefix('register-forget')
         Route::put('/update/{id}', 'update');
     });
 Route::apiResource('members', MemberController::class)->only('edit','update');
-Route::apiResource('register-ot', RegisterOTController::class)->only('store','update','show');
-
+Route::apiResource('notification', NotificationController::class)->only('index','show');
+Route::prefix('register-late-early')
+    ->controller(RegisterLateEarlyController::class)
+    ->group(function () {
+        Route::post('/store', 'store');
+        Route::get('/show', 'show');
+        Route::put('/update/{id}', 'update');
+    });
+Route::prefix('register-ot')
+    ->controller(RegisterOTController::class)
+    ->group(function () {
+        Route::post('/store', 'store');
+        Route::get('/show', 'show');
+        Route::put('/update/{id}', 'update');
+    });
 Route::prefix('request')
     ->controller(RequestController::class)
     ->group(function () {

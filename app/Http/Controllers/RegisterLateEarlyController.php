@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterOTRequest;
-use App\Services\RegisterOTService;
+use App\Http\Requests\RegisterLateEarlyRequest;
+use App\Services\RegisterLateEarlyService;
 use Illuminate\Http\Request;
 
-class RegisterOTController extends BaseController
+class RegisterLateEarlyController extends BaseController
 {
-    protected $registerOTService;
+    protected $registerLateEarlyService;
 
-    public function __construct(RegisterOTService $registerOTService)
+    public function __construct(RegisterLateEarlyService $registerLateEarlyService)
     {
         parent::__construct();
-        $this->registerOTService = $registerOTService;
+        $this->registerLateEarlyService  = $registerLateEarlyService;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -31,9 +30,8 @@ class RegisterOTController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
     }
 
     /**
@@ -42,9 +40,9 @@ class RegisterOTController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RegisterOTRequest $request)
+    public function store(RegisterLateEarlyRequest $request)
     {
-        return $this->registerOTService->store($request);
+        return $this->registerLateEarlyService->store($request);
     }
 
     /**
@@ -53,9 +51,9 @@ class RegisterOTController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(RegisterOTRequest $request)
+    public function show(Request $request)
     {
-        return $this->registerOTService->show($request);
+        return $this->registerLateEarlyService->show($request);
     }
 
     /**
@@ -66,7 +64,7 @@ class RegisterOTController extends BaseController
      */
     public function edit($id)
     {
-        
+        //
     }
 
     /**
@@ -76,9 +74,9 @@ class RegisterOTController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RegisterOTRequest $request, $id)
+    public function update(RegisterLateEarlyRequest $request, $id)
     {
-        return $this->registerOTService->edit($request,$id);
+        return $this->registerLateEarlyService->edit($request,$id);
     }
 
     /**

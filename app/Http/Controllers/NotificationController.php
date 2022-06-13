@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\NotificationResource;
+use App\Models\Member;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +25,6 @@ class NotificationController extends BaseController
     public function index(Request $request)
     {
         try {
-
             return NotificationResource::collection($this->service->listNotifications($request));
         } catch (\Exception $e) {
 
@@ -64,7 +64,7 @@ class NotificationController extends BaseController
      */
     public function show($id)
     {
-        return new NotificationResource($this->service->findOrFail($id));
+        return $this->service->view($id);
     }
 
     /**

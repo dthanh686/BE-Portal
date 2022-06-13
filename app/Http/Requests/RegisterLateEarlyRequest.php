@@ -2,14 +2,13 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\MultiDateFormat;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-class RegisterOTRequest extends FormRequest
+class RegisterLateEarlyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,11 +33,13 @@ class RegisterOTRequest extends FormRequest
             ];
         } else {
             return [
-                'request_type' => 'required|regex:/^5$/',
+                'request_type' => 'required|regex:/^4$/',
                 'request_for_date' => 'required|date_format:Y-m-d',
                 'check_in' => 'required|date_format:H:i',
                 'check_out' => 'required|date_format:H:i',
-                'reason' => 'required|string|max:100',
+                'reason' => 'required',
+                'compensation_date' => 'required|date_format:Y-m-d',
+                'compensation_time' => 'required|date_format:H:i'
             ];
         }
     }
@@ -58,3 +59,4 @@ class RegisterOTRequest extends FormRequest
         );
     }
 }
+
