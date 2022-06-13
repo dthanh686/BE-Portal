@@ -20,6 +20,7 @@ class RegisterForgetService extends BaseService
         $checkin = trim($request->check_in);
         $checkout = trim($request->check_out);
         $reason = trim($request->reason);
+        $errorCount = $request->error_count;
         $month = date('Y-m', strtotime($requestForDate));
 
         $registerForget = $this->model()->where('member_id', auth()->id())
@@ -50,6 +51,7 @@ class RegisterForgetService extends BaseService
                 'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkin)),
                 'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkout)),
                 'reason' =>$reason,
+                'error_count' => $errorCount ?? 0,
             ];
             $this->create($data);
             $requestQuota->remain = $remain - 1;
@@ -75,9 +77,9 @@ class RegisterForgetService extends BaseService
         } else {
             return response()->json([
                 'status' => false,
-                'code' => 404,
+                'code' => 204,
                 'error' => 'This request is not available yet'
-            ], 404);
+            ], 204);
         }
     }
 
@@ -90,6 +92,7 @@ class RegisterForgetService extends BaseService
             $checkin = trim($request->check_in);
             $checkout = trim($request->check_out);
             $reason = trim($request->reason);
+            $errorCount = $request->error_count;
 
             $data = [
                 'member_id' => auth()->id(),
@@ -98,6 +101,8 @@ class RegisterForgetService extends BaseService
                 'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkin)),
                 'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkout)),
                 'reason' =>$reason,
+                'error_count' => $errorCount ?? 0,
+
             ];
             $this->update($id, $data);
             return response()->json([
