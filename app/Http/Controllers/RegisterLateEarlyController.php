@@ -51,9 +51,9 @@ class RegisterLateEarlyController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        return $this->registerLateEarlyService->show($id);
+        return $this->registerLateEarlyService->show($request);
     }
 
     /**

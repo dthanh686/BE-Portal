@@ -20,10 +20,8 @@ class Request extends Model
         'reason',
         'status',
         'request_ot_time',
-<<<<<<< HEAD
         'compensation_date',
-        'compensation_time'
-=======
+        'compensation_time',
         'leave_all_day',
         'leave_start',
         'leave_end',
@@ -36,6 +34,5 @@ class Request extends Model
         'admin_approved_at',
         'admin_approved_comment',
         'error_count',
->>>>>>> develop
     ];
 }

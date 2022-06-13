@@ -53,9 +53,9 @@ class RegisterOTController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(RegisterOTRequest $request)
     {
-        return $this->registerOTService->show($id);
+        return $this->registerOTService->show($request);
     }
 
     /**

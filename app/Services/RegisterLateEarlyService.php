@@ -69,17 +69,23 @@ class RegisterLateEarlyService extends BaseService
         }
     }
 
-    public function show($id)
+    public function show($request)
     {
-        $request = $this->findOrFail($id);
-        if ($request->member_id == auth()->id()) {
-            return $request;
+        $requestForDate = trim($request->request_for_date);
+        $registerLateEarly = $this->model()->where('member_id', auth()->id())
+            ->where('request_type', 4)
+            ->where('request_for_date', $requestForDate)->first();
+            
+        if ($registerLateEarly) {
+
+            return $registerLateEarly;
         } else {
+
             return response()->json([
                 'status' => false,
-                'code' => 403,
-                'error' => 'The request invalid'
-            ], 403);
+                'code' => 200,
+                'error' => 'This request is not available yet'
+            ], 200);
         }
     }
 

@@ -60,9 +60,20 @@ Route::prefix('register-forget')
     });
 Route::apiResource('members', MemberController::class)->only('edit','update');
 Route::apiResource('notification', NotificationController::class)->only('index','show');
-Route::apiResource('register-late-early', RegisterLateEarlyController::class)->only('store','show','update');
-Route::apiResource('register-ot', RegisterOTController::class)->only('store','update','show');
-
+Route::prefix('register-late-early')
+    ->controller(RegisterLateEarlyController::class)
+    ->group(function () {
+        Route::post('/store', 'store');
+        Route::get('/show', 'show');
+        Route::put('/update/{id}', 'update');
+    });
+Route::prefix('register-ot')
+    ->controller(RegisterOTController::class)
+    ->group(function () {
+        Route::post('/store', 'store');
+        Route::get('/show', 'show');
+        Route::put('/update/{id}', 'update');
+    });
 Route::prefix('request')
     ->controller(RequestController::class)
     ->group(function () {

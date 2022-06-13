@@ -27,15 +27,21 @@ class RegisterLateEarlyRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'request_type' => 'required|regex:/^4$/',
-            'request_for_date' => 'required|date_format:Y-m-d',
-            'check_in' => 'required|date_format:H:i',
-            'check_out' => 'required|date_format:H:i',
-            'reason' => 'required',
-            'compensation_date' => 'required|date_format:Y-m-d',
-            'compensation_time' => 'required|date_format:H:i'
-        ];
+        if ($this->method() == 'GET') {
+            return [
+                'request_for_date' => 'required|date_format:Y-m-d',
+            ];
+        } else {
+            return [
+                'request_type' => 'required|regex:/^4$/',
+                'request_for_date' => 'required|date_format:Y-m-d',
+                'check_in' => 'required|date_format:H:i',
+                'check_out' => 'required|date_format:H:i',
+                'reason' => 'required',
+                'compensation_date' => 'required|date_format:Y-m-d',
+                'compensation_time' => 'required|date_format:H:i'
+            ];
+        }
     }
 
     public function failedValidation(Validator $validator)
