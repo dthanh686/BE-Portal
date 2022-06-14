@@ -50,7 +50,7 @@ Route::prefix('register-leave')
         Route::get('/show', 'show');
         Route::put('/update/{id}', 'update');
     });
-Route::apiResource('time-log', ChecklogController::class);
+Route::get('/time-log', [ChecklogController::class, 'index']);
 Route::prefix('register-forget')
     ->controller(RegisterForgetController::class)
     ->group(function () {

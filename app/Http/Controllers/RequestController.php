@@ -12,6 +12,7 @@ class RequestController extends BaseController
     public function __construct(RequestService $requestService)
     {
         parent::__construct();
+        $this->middleware('auth.manager');
         $this->requestService = $requestService;
     }
 
