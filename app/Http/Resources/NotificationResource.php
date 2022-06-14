@@ -15,14 +15,15 @@ class NotificationResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
-        // return[
-        //     'published_date' => $this->published_date,
-        //     'subject' => $this->subject,
-        //     'status' => $this->status,
-        //     'attachment' => $this->attachment,
-        //     'created_by' => $this->authorInfo->full_name,
-        //      'published_to' => $this->published_to,
-        // ];
+        return[
+            'published_date' => $this->published_date,
+            'subject' => $this->subject,
+            'status' => $this->status,
+            'attachment' => $this->attachment,
+            'created_by' => $this->authorInfo->full_name,
+            'published_to' => $this->published_to,
+            'status' => $this->status,
+            'message' => $this->message,
+        ];
     }
 }
