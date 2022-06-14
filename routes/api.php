@@ -94,4 +94,7 @@ Route::prefix('admin')
             Route::get('/get', 'index');
             Route::put('/approve/{id}', 'update');
         });
+        Route::prefix('notifications')->group(function () {
+            Route::post('/store', 'createNotifications');
+        });
     });

@@ -17,13 +17,31 @@ class NotificationService extends BaseService
         return NotificationRepository::class;
     }
 
+    public function store($data)
+    {
+
+        $notifications = Notification::create($data->all());
+        if ($data->hasFile('attachment')) {
+            $newFileName = uniqid() . '-' . $data->attachment->getClientOriginalName();
+            $filePath = $data->attachment->storeAs(config('common.default_file_path') . 'notifications', $newFileName);
+            $notifications->attachment = 'http://54.179.42.101/storage' . str_replace('public', '', $filePath);
+        }
+
+        $notifications->save();
+
+        return response()->json([
+            'status' => true,
+            'code' => 200,
+            'message' => 'Create request success!'
+        ], 200);
+    }
+
     public function listNotifications($request)
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
 
         $divisionId = Member::where('id', auth()->id())->with('divisions')->first();
         $divisionId = $divisionId->divisions->first()->id;
-
         $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"]);
         $orderBy = $request->get('sort');
         if ($orderBy) {

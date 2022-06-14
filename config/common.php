@@ -3,6 +3,7 @@
 return [
     'default_page_size' => 30,
     'default_image_path' => "public/images/",
+    'default_file_path' => "public/file/",
     'note_confirm' => [
         1 => 'Forget Confirmed',
         2 => 'Leave Confirmed',
