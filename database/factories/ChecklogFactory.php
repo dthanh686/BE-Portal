@@ -17,7 +17,7 @@ class ChecklogFactory extends Factory
 
         static $id = 0;
         static $day = 1;
-        static $month = 1;
+        static $month = 3;
         static $year = 2022;
         $workDate = $year.'-'.$month.'-'.$day;
         $checkin = mktime(random_int(7,9), random_int(0, 59), random_int(0, 59), $month, $day, $year);
@@ -25,9 +25,6 @@ class ChecklogFactory extends Factory
         $checkout = mktime(random_int(16,19), random_int(0, 59), random_int(0, 59), $month, $day, $year);
         static $cout = 0;
         static $time;
-        if ($id == 101) {
-            $id = 1;
-        }
         if ($id == 99) {
             if(date('D',strtotime($workDate)) == 'Sat' || date('D',strtotime($workDate)) == 'Sun') {
                 $cout = 3;
