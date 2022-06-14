@@ -30,19 +30,6 @@ class RegisterForgetRequest extends FormRequest
             return [
                 'request_for_date' => 'required|date_format:Y-m-d',
             ];
-        } elseif ($this->method() == 'PUT') {
-            return [
-                'request_type' => 'required|regex:/^1$/',
-                'request_for_date' => 'required|date_format:Y-m-d',
-                'check_in' => 'required|date_format:H:i',
-                'check_out' => 'required|date_format:H:i',
-                'reason' => 'required|string|max:100',
-                'error_count' => 'required|regex:/^[0-3]$/',
-                'status' => [
-                    'required',
-                    'regex:/^(-1|0)$/',
-                ],
-            ];
         } else {
             return [
                 'request_type' => 'required|regex:/^1$/',
@@ -51,7 +38,7 @@ class RegisterForgetRequest extends FormRequest
                 'check_out' => 'required|date_format:H:i',
                 'reason' => 'required|string|max:100',
                 'error_count' => 'required|regex:/^[0-3]$/',
-                ];
+            ];
         }
 
 

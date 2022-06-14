@@ -26,6 +26,7 @@ class RegisterForgetService extends BaseService
 
         $registerForget = $this->model()->where('member_id', auth()->id())
                          ->where('request_type', $requestType)
+                         ->where('status', 0)
                          ->where('request_for_date', $requestForDate)
                          ->exists();
 
@@ -81,6 +82,7 @@ class RegisterForgetService extends BaseService
         $requestForDate = trim($request->request_for_date);
         $registerForget = $this->model()->where('member_id', auth()->id())
             ->where('request_type', 1)
+            ->where('status', 0)
             ->where('request_for_date', $requestForDate);
         if ($registerForget->exists()) {
             return $registerForget->first();
@@ -104,7 +106,6 @@ class RegisterForgetService extends BaseService
             $checkout = trim($request->check_out);
             $reason = trim($request->reason);
             $errorCount = $request->error_count;
-            $status = $request->status;
 
             $data = [
                 'member_id' => auth()->id(),
@@ -114,18 +115,14 @@ class RegisterForgetService extends BaseService
                 'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkout)),
                 'reason' =>$reason,
                 'error_count' => $errorCount,
-                'status' => $status,
 
             ];
             $this->update($id, $data);
-            $mess = 'Update request success!';
-            if ($status != 0) {
-                $mess = 'Cancel request success!';
-            }
+
             return response()->json([
                 'status' => true,
                 'code' => 201,
-                'message' => $mess,
+                'message' => 'Update request success!',
             ], 201);
         } else {
             return response()->json([
