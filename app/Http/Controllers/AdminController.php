@@ -15,6 +15,7 @@ class AdminController extends BaseController
     public function __construct(RequestService $requestService,NotificationService $notificationService)
     {
         parent::__construct();
+        $this->middleware('auth.admin');
         $this->requestService = $requestService;
         $this->notificationService = $notificationService;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LeaveQuota;
 use App\Models\MemberRequestQuota;
 use App\Models\Worksheet;
 use App\Repositories\RequestRepository;
@@ -29,6 +30,9 @@ class RequestService extends BaseService
             $date = $requestSent->request_for_date;
             $requestType = $requestSent->request_type;
             $note = config('common.note_confirm');
+            $month = date('Y-m', strtotime($date));
+
+
 
             $worksheet = Worksheet::where('member_id', $memberId)->where('work_date', $date)->first();
 
@@ -40,8 +44,39 @@ class RequestService extends BaseService
             ];
 
             $this->update($id, $data);
-            $worksheet->note = $note[$requestType];
-            $worksheet->save();
+
+            if ($status == 1) {
+                $worksheet->note = $note[$requestType];
+                $worksheet->save();
+            } else {
+                if ($requestType == 1 || $requestType == 4) {
+                    $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
+                    $requestQuota->remain = $requestQuota->remain + 1;
+                    $requestQuota->save();
+                } elseif ($requestType == 2) {
+                    $year = date('Y', strtotime($date));
+                    $leaveAllDay = $requestSent->leave_all_day;
+                    $leaveTime = $requestSent->leave_time;
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+
+                    $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
+
+                    $leaveQuota->remain = $leaveQuota->remain + $timeLeave;
+                    $leaveQuota->paid_leave =  $leaveQuota->paid_leave - $timeLeave;
+                    $leaveQuota->save();
+                } elseif ($requestType == 3) {
+                    $year = date('Y', strtotime($date));
+                    $leaveAllDay = $requestSent->leave_all_day;
+                    $leaveTime = $requestSent->leave_time;
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+
+                    $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
+
+                    $leaveQuota->unpaid_leave = $leaveQuota->unpaid_leave - $timeLeave;
+                    $leaveQuota->save();
+                }
+
+            }
 
             return response()->json([
                 'status' => true,
@@ -99,6 +134,32 @@ class RequestService extends BaseService
             } else {
                 $worksheet->note = null;
                 $worksheet->save();
+                if ($requestType == 1 || $requestType == 4) {
+                    $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
+                    $requestQuota->remain = $requestQuota->remain + 1;
+                    $requestQuota->save();
+                } elseif ($requestType == 2) {
+                    $year = date('Y', strtotime($date));
+                    $leaveAllDay = $requestConfirm->leave_all_day;
+                    $leaveTime = $requestConfirm->leave_time;
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+
+                    $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
+
+                    $leaveQuota->remain = $leaveQuota->remain + $timeLeave;
+                    $leaveQuota->paid_leave =  $leaveQuota->paid_leave - $timeLeave;
+                    $leaveQuota->save();
+                } elseif ($requestType == 3) {
+                    $year = date('Y', strtotime($date));
+                    $leaveAllDay = $requestConfirm->leave_all_day;
+                    $leaveTime = $requestConfirm->leave_time;
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+
+                    $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
+
+                    $leaveQuota->unpaid_leave = $leaveQuota->unpaid_leave - $timeLeave;
+                    $leaveQuota->save();
+                }
             }
 
             return response()->json([

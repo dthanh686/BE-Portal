@@ -7,7 +7,7 @@ use App\Models\Worksheet;
 use App\Repositories\RequestRepository;
 use Illuminate\Support\Facades\Auth;
 
-class RegisterLateEarlyService extends BaseService
+class   RegisterLateEarlyService extends BaseService
 {
 
     public function getRepository()
@@ -75,7 +75,7 @@ class RegisterLateEarlyService extends BaseService
         $registerLateEarly = $this->model()->where('member_id', auth()->id())
             ->where('request_type', 4)
             ->where('request_for_date', $requestForDate)->first();
-            
+
         if ($registerLateEarly) {
 
             return $registerLateEarly;

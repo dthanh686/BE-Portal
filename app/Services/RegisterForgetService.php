@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\MemberRequestQuota;
+use App\Models\Worksheet;
 use App\Repositories\RequestRepository;
 
 class RegisterForgetService extends BaseService
@@ -25,11 +26,21 @@ class RegisterForgetService extends BaseService
 
         $registerForget = $this->model()->where('member_id', auth()->id())
                          ->where('request_type', $requestType)
+                         ->where('status', 0)
                          ->where('request_for_date', $requestForDate)
                          ->exists();
 
         $requestQuota = MemberRequestQuota::where('member_id', auth()->id())->where('month', $month)->first();
         $remain = $requestQuota->remain;
+
+        $worksheet = Worksheet::where('member_id', auth()->id())->where('work_date', $requestForDate)->exists();
+        if (!$worksheet) {
+            return response()->json([
+                'status' => false,
+                'code' => 423,
+                'error' => 'The requested date does not exist in the work sheet'
+            ], 423);
+        }
 
         if ($registerForget) {
             return response()->json([
@@ -51,7 +62,7 @@ class RegisterForgetService extends BaseService
                 'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkin)),
                 'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkout)),
                 'reason' =>$reason,
-                'error_count' => $errorCount ?? 0,
+                'error_count' => $errorCount,
             ];
             $this->create($data);
             $requestQuota->remain = $remain - 1;
@@ -71,14 +82,16 @@ class RegisterForgetService extends BaseService
         $requestForDate = trim($request->request_for_date);
         $registerForget = $this->model()->where('member_id', auth()->id())
             ->where('request_type', 1)
+            ->where('status', 0)
             ->where('request_for_date', $requestForDate);
         if ($registerForget->exists()) {
             return $registerForget->first();
+
         } else {
             return response()->json([
                 'status' => false,
                 'code' => 204,
-                'error' => 'This request is not available yet'
+                'error' => 'This request is not available yet',
             ], 204);
         }
     }
@@ -101,20 +114,21 @@ class RegisterForgetService extends BaseService
                 'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkin)),
                 'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkout)),
                 'reason' =>$reason,
-                'error_count' => $errorCount ?? 0,
+                'error_count' => $errorCount,
 
             ];
             $this->update($id, $data);
+
             return response()->json([
                 'status' => true,
                 'code' => 201,
-                'message' => 'Update request success!'
+                'message' => 'Update request success!',
             ], 201);
         } else {
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'code' => 403,
-                'error' => 'The request is pending. You cannot edit this request'
+                'message' => 'Fail',
             ], 403);
         }
      }
