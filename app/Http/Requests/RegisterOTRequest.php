@@ -34,7 +34,7 @@ class RegisterOTRequest extends FormRequest
             ];
         } else {
             return [
-                'request_type' => 'required|regex:/^5$/',
+                // 'request_type' => 'required|regex:/^5$/',
                 'request_for_date' => 'required|date_format:Y-m-d',
                 'check_in' => 'required|date_format:H:i',
                 'check_out' => 'required|date_format:H:i',
