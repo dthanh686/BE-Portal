@@ -16,13 +16,15 @@ class NotificationFactory extends Factory
     {
         $divionId = DB::table('divisions')->pluck('id');
         $createBy = DB::table('members')->pluck('created_by');
+        static $i = 1;
         return [
             'published_date' => $this->faker->date(),
-            'subject' => $this->faker->name,
+            'subject' => 'Thông báo chuyển văn phòng lần thứ' . $i++ ,
             'status' => rand(0, 3),
-            'attachment' => 'http://127.0.0.1:8000/storage/images/members/6294504f50c90-159726055_3884927424894828_3378186297290425618_n.jpg',
+            'attachment' => 'http://54.179.42.101/storage/file/notifications/62a9ef604a1d2-Relipa_Portal_Database_Detail.xlsx',
             'published_to' => json_encode([$this->faker->randomElement($divionId)]),
             'created_by' => $this->faker->randomElement($createBy),
+            'message' => 'Tất cả được nghỉ làm 1 năm(Vẫn nhận lương như bình thường)',
         ];
     }
 }

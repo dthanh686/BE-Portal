@@ -29,7 +29,7 @@ class MemberRequest extends FormRequest
         return [
             'avatar' => 'mimes:jpg,png|max:4096|dimensions:min_width=300,min_height=300',
             'avatar_official' => 'mimes:jpg,png|max:4096|dimensions:min_width=500,min_height=500',
-            'gender' => 'required',
+             'gender' => 'required|regex:/^[01]$/',
             'birth_date' => 'required|date',
             'other_email' => 'required|email',
             'identity_number' => 'required|numeric|digits_between:1,12',
@@ -42,7 +42,6 @@ class MemberRequest extends FormRequest
             'bank_name' => 'required|max:70',
             'bank_account' => 'required|max:20',
             'marital_status' => 'required',
-            'academic_level' => 'required|max:50',
             'permanent_address' => 'required|max:255',
             'temporary_address' => 'required|max:255',
             'tax_identification' => 'nullable|max:20',
