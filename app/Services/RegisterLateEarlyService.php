@@ -83,9 +83,9 @@ class   RegisterLateEarlyService extends BaseService
 
             return response()->json([
                 'status' => false,
-                'code' => 200,
+                'code' => 204,
                 'error' => 'This request is not available yet'
-            ], 200);
+            ], 204);
         }
     }
 
