@@ -7,13 +7,13 @@ use App\Models\Request as ModelsRequest;
 use App\Services\RequestService;
 use Illuminate\Http\Request;
 
-class RequestController extends Controller
+class RequestController extends BaseController
 {
     protected $requestService;
     public function __construct(RequestService $requestService)
     {
-        // parent::__construct();
-        // $this->middleware('auth.manager');
+        parent::__construct();
+        $this->middleware('auth.manager');
         $this->requestService = $requestService;
     }
 
