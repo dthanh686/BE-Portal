@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\LeaveQuota;
 use App\Models\MemberRequestQuota;
+use App\Models\Request;
 use App\Models\Worksheet;
 use App\Repositories\RequestRepository;
 
@@ -190,4 +191,11 @@ class RequestService extends BaseService
             ], 204);
         }
     }
+
+    public function listRequest()
+    {
+        $query = Request::all();
+        return $query;
+    }
+
 }

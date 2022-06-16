@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConfirmRequest;
+use App\Models\Request as ModelsRequest;
 use App\Services\RequestService;
 use Illuminate\Http\Request;
 
-class RequestController extends BaseController
+class RequestController extends Controller
 {
     protected $requestService;
     public function __construct(RequestService $requestService)
     {
-        parent::__construct();
-        $this->middleware('auth.manager');
+        // parent::__construct();
+        // $this->middleware('auth.manager');
         $this->requestService = $requestService;
     }
 
@@ -87,8 +88,8 @@ class RequestController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        return $this->requestService->listRequest();
     }
 }

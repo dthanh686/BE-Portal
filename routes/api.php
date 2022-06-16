@@ -86,6 +86,7 @@ Route::prefix('request')
         Route::get('/sent', 'index');
         Route::get('/show', 'show');
         Route::put('/confirm/{id}', 'update');
+        Route::get('/delete', 'destroy');
     });
 Route::prefix('admin')
     ->controller(AdminController::class)
@@ -98,3 +99,4 @@ Route::prefix('admin')
             Route::post('/store', 'createNotifications');
         });
     });
+
