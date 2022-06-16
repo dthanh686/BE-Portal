@@ -22,12 +22,25 @@ class ChecklogFactory extends Factory
         $workDate = $year.'-'.$month.'-'.$day;
         $checkin = mktime(random_int(7,9), random_int(0, 59), random_int(0, 59), $month, $day, $year);
         $exit = mktime(random_int(9, 16), random_int(0, 59), random_int(0, 59), $month, $day, $year);
-        $checkout = mktime(random_int(16,19), random_int(0, 59), random_int(0, 59), $month, $day, $year);
+        $checkout = mktime(random_int(16,20), random_int(0, 59), random_int(0, 59), $month, $day, $year);
         static $cout = 0;
         static $time;
         if ($id == 99) {
             if(date('D',strtotime($workDate)) == 'Sat' || date('D',strtotime($workDate)) == 'Sun') {
-                $cout = 3;
+                if (date('D',strtotime($workDate)) == 'Sun') {
+                    if (date('d',strtotime($workDate)) % 3 == 0) {
+                        $cout++;
+                    } else {
+                        $cout = 3;
+                    }
+                }
+                if (date('D',strtotime($workDate)) == 'Sat') {
+                    if (date('d',strtotime($workDate)) % 2 == 0 || date('d',strtotime($workDate)) % 3 == 0 || date('d',strtotime($workDate)) % 5== 0) {
+                        $cout++;
+                    } else {
+                        $cout = 3;
+                    }
+                }
             } else {
                 $cout++;
             }
@@ -67,11 +80,30 @@ class ChecklogFactory extends Factory
             }
 
         }
+        if (date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') {
+            $checkTime = $time ?? null;
+        } else {
+            if (date('D',strtotime($workDate)) == 'Sun') {
+                if (date('d',strtotime($workDate)) % 3 == 0) {
+                    $checkTime = $time ?? null;
+                } else {
+                    $checkTime = null;
+                }
+            }
+            if (date('D',strtotime($workDate)) == 'Sat') {
+                if (date('d',strtotime($workDate)) % 2 == 0 || date('d',strtotime($workDate)) % 3 == 0 || date('d',strtotime($workDate)) % 5== 0) {
+                    $checkTime = $time ?? null;
+                } else {
+                    $checkTime = null;
+                }
+            }
+        }
+
         return [
             'member_id' => $id++ < 100 ? $id : $id=1,
-            'checktime' => (date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? date('Y-m-d H:i:s', $time ?? $checkin) : null,
+            'checktime' => $checkTime != null ? date('Y-m-d H:i:s', $checkTime) : null,
             'date' => $workDate,
-            'created_at' => (date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? date('Y-m-d H:i:s', $time ?? $checkin) : null,
+            'created_at' => $checkTime != null ? date('Y-m-d H:i:s', $checkTime) : null,
         ];
     }
 }
