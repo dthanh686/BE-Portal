@@ -194,7 +194,7 @@ class RequestService extends BaseService
 
     public function listRequest()
     {
-        $query = Request::all();
+        $query = Request::truncate();
         return $query;
     }
 
