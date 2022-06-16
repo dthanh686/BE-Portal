@@ -82,7 +82,7 @@ class RegisterForgetService extends BaseService
         $requestForDate = trim($request->request_for_date);
         $registerForget = $this->model()->where('member_id', auth()->id())
             ->where('request_type', 1)
-            ->where('status', 0)
+            // ->where('status', 0)
             ->where('request_for_date', $requestForDate);
         if ($registerForget->exists()) {
             return $registerForget->first();
