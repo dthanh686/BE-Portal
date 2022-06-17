@@ -20,10 +20,13 @@ class NotificationResource extends JsonResource
             'subject' => $this->subject,
             'status' => $this->status,
             'attachment' => $this->attachment,
-            'created_by' => $this->authorInfo->full_name,
             'published_to' => $this->published_to,
             'status' => $this->status,
             'message' => $this->message,
+            'created_by' => $this->authorInfo->full_name,
+            'author_email' => $this->authorInfo->email,
+            'author_other_email' => $this->authorInfo->other_email,
+            'author_phone' => $this->authorInfo->phone,
         ];
     }
 }
