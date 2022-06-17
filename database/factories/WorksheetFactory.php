@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Checklog;
+use App\Models\MemberShift;
+use App\Models\Shift;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -48,10 +50,23 @@ class WorksheetFactory extends Factory
         $checkLog = Checklog::where('member_id', $memberId)->where('date', $workDate);
         $checkIN = $checkLog->first()->checktime ?? null;
         $checkOUT = $checkLog->latest()->first()->checktime ?? null;
+        $shifts = MemberShift::query()->where('member_id', $memberId)->first();
+        $shiftIf = $shifts->shift_id;
+        if ($shiftIf == 1) {
+            $ot = mktime(18, 30, 0, $month, $day, $year);
+            $start = mktime(8, 30, 0, $month, $day, $year);
+            $finish = mktime(17, 30, 0, $month, $day, $year);
+        } elseif ($shiftIf == 2) {
+            $ot = mktime(18, 0, 0, $month, $day, $year);
+            $start = mktime(8, 0, 0, $month, $day, $year);
+            $finish = mktime(17, 0, 0, $month, $day, $year);
+        } else {
+            $ot = mktime(19, 0, 0, $month, $day, $year);
+            $start = mktime(9, 0, 0, $month, $day, $year);
+            $finish = mktime(18, 0, 0, $month, $day, $year);
+        }
 
-        $ot = mktime(18, 30, 0, $month, $day, $year);
-        $start = mktime(8, 30, 0, $month, $day, $year);
-        $finish = mktime(17, 30, 0, $month, $day, $year);
+
         $OT = new \DateTime(date('H:I', $ot));
         $START = new \DateTime(date('H:i', $start));
         $END = new \DateTime(date('H:i', $finish));
@@ -62,7 +77,6 @@ class WorksheetFactory extends Factory
         $late = strtotime($checkIN) > $start ? date('H:i', strtotime($LATE)) : null;
         $early = strtotime($checkOUT) < $finish ? date('H:i', strtotime($EARLY)) : null;
         $inOffice = $CHECKOUT->diff($CHECKIN)->format("%H:%i");
-        $timeworkOffice =  date('H:i', ($finish-$start));
         $a = $late != null ? new \DateTime($late) : null;
         $b = $early != null ? new \DateTime($early) : null;
         $a != null ? $interval1 = $a->diff(new \DateTime('00:00')) : false;
@@ -77,8 +91,23 @@ class WorksheetFactory extends Factory
         $worktime =  strtotime($checkIN) < $start && strtotime($checkOUT) > $finish ? $wt->format("%H:%i") :  $wt->diff(new \DateTime(date('H:i', strtotime($lack))))->format("%H:%i");
         $otTime = strtotime($checkOUT) > $ot ? $OT->diff($CHECKOUT)->format("%H:%i") : null;
         $otTime != null ? $timeOT = date('H:i', strtotime($otTime)) : $timeOT = null;
-        $compensation = strtotime($checkOUT) > $finish ? $CHECKOUT->diff($END)->format("%H:%i") : null;
+        if (strtotime($checkOUT) > $ot) {
+            $compensation = '01:00';
+        } elseif (strtotime($checkOUT) > $finish) {
+            $compensation = $CHECKOUT->diff($END)->format("%H:%i");
+
+        } else {
+            $compensation = null;
+        }
         $compensation != null ? $timeCompen = date('H:i', strtotime($compensation)) : $timeCompen = null;
+        if (date('D',strtotime($workDate)) == 'Sat' || date('D',strtotime($workDate)) == 'Sun') {
+            if ($checkOUT != null && $checkIN != null) {
+                $timeOT = date('H:i', strtotime($worktime));
+            } else {
+                $timeOT = null;
+            }
+        }
+
         return [
             'member_id' => $memberId,
             'work_date' => $workDate,
@@ -91,7 +120,7 @@ class WorksheetFactory extends Factory
             'in_office' => (date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? date('H:i', strtotime($inOffice)) : null,
             'work_time' => (date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? date('H:i', strtotime($worktime)) : null,
             'lack' => (date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? $lack : null,
-            'ot_time' =>(date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? $timeOT : null,
+            'ot_time' => $timeOT,
             'compensation' =>(date('D',strtotime($workDate)) != 'Sat' && date('D',strtotime($workDate)) != 'Sun') ? $timeCompen : null,
         ];
     }

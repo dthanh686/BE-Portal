@@ -13,11 +13,22 @@ class ShiftFactory extends Factory
      */
     public function definition()
     {
-        $checkin = $this->faker->unique()->randomElement(['8h', '9h', '8h30']);
+        static $id = 1;
+        $shift = 'Ca '.$id++;
+        if ($shift == 'Ca 1') {
+            $checkin = '8h30';
+            $chckout = '17h30';
+        } elseif($shift == 'Ca 2') {
+            $checkin = '8h';
+            $chckout = '17h';
+        } else {
+            $checkin = '9h';
+            $chckout = '18h';
+        }
         return [
-            'shift_name' => $this->faker->unique()->randomElement(['Ca 1', 'Ca 2', 'Ca 3']),
+            'shift_name' => $shift,
             'check_in' => $checkin,
-            'check_out' => $checkin == '8h' ? '17h' : ($checkin == '9h' ? '18h' : ($checkin == '8h30' ? '17h30' : false)),
+            'check_out' => $chckout,
             'work_time' => 8,
             'lunch_break' => 60,
             'note' => 'note',
