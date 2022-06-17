@@ -23,7 +23,7 @@ class CheckRoleManager
             return response()->json([
                 'status' => 'error',
                 'code' => 401,
-                'error' => 'You are not logged in! Please login',
+                'error' => 'Only manager has permission to login to this page',
             ], 401);
         }
     }
