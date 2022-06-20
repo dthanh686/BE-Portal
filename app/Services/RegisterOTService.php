@@ -87,7 +87,7 @@ class RegisterOTService extends BaseService
     public function edit($request, $id)
     {
         $requestOT = $this->findOrFail($id);
-        if ($requestOT->status == 0 && $requestOT->member_id == auth()->id()) {
+        if (($requestOT->status == 0 || $requestOT->status == -1) && $requestOT->member_id == auth()->id()) {
             $requestForDate = $request->request_for_date;
             $requestType = $request->request_type;
             $reason = $request->reason;

@@ -17,7 +17,9 @@ class RequestService extends BaseService
     }
 
     public function getRequestSent() {
-        $requestSent = $this->model()->where('status', 0)->get();
+        $requestSent = $this->model()->where('status', 0)
+            ->orWhere('manager_confirmed_status', '<>', null)
+            ->get();
         return $requestSent;
     }
 
@@ -32,8 +34,7 @@ class RequestService extends BaseService
             $requestType = $requestSent->request_type;
             $note = config('common.note_confirm');
             $month = date('Y-m', strtotime($date));
-
-
+            $year = date('Y', strtotime($date));
 
             $worksheet = Worksheet::where('member_id', $memberId)->where('work_date', $date)->first();
 
@@ -41,13 +42,13 @@ class RequestService extends BaseService
                 'status' => $status,
                 'manager_confirmed_comment' => $comment,
                 'manager_confirmed_at' => now(),
-                'manager_confirmed_status' => 1,
+                'manager_confirmed_status' => $status,
             ];
 
             $this->update($id, $data);
 
             if ($status == 1) {
-                $worksheet->note = $note[$requestType];
+                $worksheet->note = $worksheet->note + $note[$requestType];
                 $worksheet->save();
             } else {
                 if ($requestType == 1 || $requestType == 4) {
@@ -55,7 +56,6 @@ class RequestService extends BaseService
                     $requestQuota->remain = $requestQuota->remain + 1;
                     $requestQuota->save();
                 } elseif ($requestType == 2) {
-                    $year = date('Y', strtotime($date));
                     $leaveAllDay = $requestSent->leave_all_day;
                     $leaveTime = $requestSent->leave_time;
                     $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
@@ -66,7 +66,6 @@ class RequestService extends BaseService
                     $leaveQuota->paid_leave =  $leaveQuota->paid_leave - $timeLeave;
                     $leaveQuota->save();
                 } elseif ($requestType == 3) {
-                    $year = date('Y', strtotime($date));
                     $leaveAllDay = $requestSent->leave_all_day;
                     $leaveTime = $requestSent->leave_time;
                     $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
@@ -94,7 +93,9 @@ class RequestService extends BaseService
     }
 
     public function getRequestConfirm() {
-        $requestConfirm = $this->model()->where('status', 1)->get();
+        $requestConfirm = $this->model()->where('status', 1)
+            ->orWhere('admin_approved_status', '<>', null)
+            ->get();
         return $requestConfirm;
     }
 
@@ -110,7 +111,8 @@ class RequestService extends BaseService
             $checkOut = $requestConfirm->check_out;
             $date = $requestConfirm->request_for_date;
             $requestType = $requestConfirm->request_type;
-            $note = config('common.note_approve');
+            $noteApprove = config('common.note_approve');
+            $noteConfirm = config('common.note_confirm');
             $errorCount = $requestConfirm->error_count;
             $month = date('Y-m', strtotime($date));
 
@@ -118,25 +120,29 @@ class RequestService extends BaseService
 
             $data = [
                 'status' => $status,
-                'manager_confirmed_comment' => $comment,
-                'manager_confirmed_at' => now(),
-                'manager_confirmed_status' => 1,
+                'admin_approved_comment' => $comment,
+                'admin_approved_at' => now(),
+                'admin_approved_status' => $status,
             ];
 
             $this->update($id, $data);
             if ($status === 2) {
-                $worksheet->note = $note[$requestType];
+                $worksheet->note = str_replace($noteConfirm[$requestType], $noteApprove[$requestType], $worksheet->note);
                 $worksheet->save();
                 if ($errorCount != 0) {
                     $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
                     $requestQuota->remain = $requestQuota->remain + 1;
                     $requestQuota->save();
+                    $worksheet->check_in = $checkIn;
+                    $worksheet->check_out = $checkOut;
+                    $worksheet->save();
                 }
             } else {
-                $worksheet->note = null;
+                $worksheet->note = str_replace($noteConfirm[$requestType], '', $worksheet->note);
                 $worksheet->save();
-                if ($requestType == 1 || $requestType == 4) {
+                if ($requestType == 1) {
                     $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
+
                     $requestQuota->remain = $requestQuota->remain + 1;
                     $requestQuota->save();
                 } elseif ($requestType == 2) {
@@ -160,6 +166,10 @@ class RequestService extends BaseService
 
                     $leaveQuota->unpaid_leave = $leaveQuota->unpaid_leave - $timeLeave;
                     $leaveQuota->save();
+                } elseif ($requestType == 4) {
+                    $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
+                    $requestQuota->remain = $requestQuota->remain + 1;
+                    $requestQuota->save();
                 }
             }
 

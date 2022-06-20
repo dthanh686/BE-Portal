@@ -131,8 +131,9 @@ class RegisterLeaveService extends BaseService
         $leaveRequest = LeaveRequest::where('member_id', auth()->id())->where('request_for_date', $leaveDate)->first();
         $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
         $timeQuota = $leaveRequest->quota;
+        $status = $registerLeave->status;
 
-        if ($registerLeave->status == 0 && $registerLeave->member_id == auth()->id()) {
+        if (($registerLeave->status == 0 || $registerLeave->status == -1) && $registerLeave->member_id == auth()->id()) {
             $requestForDate = trim($request->request_for_date);
             $requestType = $request->request_type;
             $checkin = trim($request->check_in);
@@ -155,6 +156,7 @@ class RegisterLeaveService extends BaseService
                 'leave_start' => $leaveAllDay != null ? null : $leaveStart,
                 'leave_end' => $leaveAllDay != null ? null : $leaveEnd,
                 'leave_time' => $leaveAllDay != null ? null : $leaveTime,
+                'status' => 1,
             ];
 
             $dataLeave = [
@@ -201,15 +203,34 @@ class RegisterLeaveService extends BaseService
 
     public function deleteLeave($id)
     {
-        $registerLeave = $this->model()->where('member_id', auth()->id())->where('request_type', 4)->find($id);
+        $registerLeave = $this->findOrFail($id);
 
         if ($registerLeave) {
-
-            $this->delete($id);
-            $month = date('Y-m', strtotime($registerLeave->request_for_date));
-            $requestQuota = MemberRequestQuota::where('member_id', auth()->id())->where('month', $month)->first();
-            $requestQuota->remain = $requestQuota->remain + 1;
-            $requestQuota->save();
+            $year = date('Y', strtotime($registerLeave->request_for_date));
+            $requestType = $registerLeave->request_type;
+            $status = $registerLeave->status;
+            $leaveAllDay = $registerLeave->leave_all_day;
+            $leaveTime = $registerLeave->leave_time;
+            $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+            $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
+            if (($requestType == 2 || $requestType == 3) && $status == 0) {
+                if ($requestType == 2) {
+                    $leaveQuota->remain = $leaveQuota->remain + $timeLeave;
+                    $leaveQuota->paid_leave =  $leaveQuota->paid_leave - $timeLeave;
+                    $leaveQuota->save();
+                    $this->delete($id);
+                } else {
+                    $leaveQuota->unpaid_leave = $leaveQuota->unpaid_leave - $timeLeave;
+                    $leaveQuota->save();
+                    $this->delete($id);
+                }
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'code' => 403,
+                    'error' => 'The request is pending. You cannot delete this request'
+                ], 403);
+            }
 
             return response()->json([
                 'status' => true,
