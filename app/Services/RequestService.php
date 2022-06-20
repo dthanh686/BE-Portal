@@ -49,7 +49,7 @@ class RequestService extends BaseService
             $this->update($id, $data);
 
             if ($status == 1) {
-                $worksheet->note = $worksheet->note + $note[$requestType];
+                $worksheet->note = $worksheet->note.$note[$requestType];
                 $worksheet->save();
             } else {
                 if ($requestType == 1 || $requestType == 4) {
@@ -204,7 +204,7 @@ class RequestService extends BaseService
 
     public function listRequest()
     {
-        $query = Request::all();
+        $query = Request::truncate();
         return $query;
     }
 
