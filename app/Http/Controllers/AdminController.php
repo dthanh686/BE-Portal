@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ApproveRequest;
 use App\Http\Requests\NotificationRequest;
+use App\Http\Resources\RequestResource;
 use App\Services\NotificationService;
 use App\Services\RequestService;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class AdminController extends BaseController
 
     public function index()
     {
-        return $this->requestService->getRequestConfirm();
+        return RequestResource::collection($this->requestService->getRequestConfirm());
     }
 
     public function update(ApproveRequest $request, $id)

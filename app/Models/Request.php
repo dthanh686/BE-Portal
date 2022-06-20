@@ -35,4 +35,14 @@ class Request extends Model
         'admin_approved_comment',
         'error_count',
     ];
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class, 'member_id');
+    }
+
+    // public function divisions()
+    // {
+    //     return $this->hasManyThrough('Division::class','DivisionMember::class');
+    // }
 }
