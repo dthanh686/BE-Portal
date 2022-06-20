@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConfirmRequest;
+use App\Http\Resources\RequestResource;
 use App\Models\Request as ModelsRequest;
 use App\Services\RequestService;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class RequestController extends BaseController
      */
     public function index()
     {
-        return $this->requestService->getRequestSent();
+        return RequestResource::collection($this->requestService->getRequestSent());
     }
 
     /**
