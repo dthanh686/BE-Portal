@@ -31,7 +31,7 @@ class NotificationRequest extends FormRequest
             'subject' => 'required',
             'message' => 'required',
             'status' => 'required',
-            'attachment' => 'required',
+            // 'attachment' => 'required',
             'created_by' => 'required',
             'published_to' => 'required'
         ];
