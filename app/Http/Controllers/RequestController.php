@@ -25,7 +25,7 @@ class RequestController extends BaseController
      */
     public function index()
     {
-        return RequestResource::collection($this->requestService->getRequestSent());
+        return $this->requestService->getRequestSent();
     }
 
     /**

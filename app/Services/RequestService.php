@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\RequestResource;
 use App\Models\LeaveQuota;
 use App\Models\MemberRequestQuota;
 use App\Models\Request;
@@ -20,7 +21,7 @@ class RequestService extends BaseService
         $requestSent = $this->model()->where('status', 0)
             ->orWhere('manager_confirmed_status', '<>', null)
             ->get();
-        return $requestSent;
+            return RequestResource::collection($requestSent);
     }
 
     public function confirm($request, $id)
@@ -96,7 +97,7 @@ class RequestService extends BaseService
         $requestConfirm = $this->model()->where('status', 1)
             ->orWhere('admin_approved_status', '<>', null)
             ->get();
-        return $requestConfirm;
+            return RequestResource::collection($requestConfirm);
     }
 
     public function approve($request, $id)

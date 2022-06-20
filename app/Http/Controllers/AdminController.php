@@ -23,7 +23,7 @@ class AdminController extends BaseController
 
     public function index()
     {
-        return RequestResource::collection($this->requestService->getRequestConfirm());
+        return $this->requestService->getRequestConfirm();
     }
 
     public function update(ApproveRequest $request, $id)
