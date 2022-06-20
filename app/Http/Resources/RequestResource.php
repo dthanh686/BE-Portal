@@ -15,6 +15,7 @@ class RequestResource extends JsonResource
     public function toArray($request)
     {
         return[
+            'id' => $this->id,
             'member_id' => $this->member_id,
             'request_type' => $this->request_type,
             'request_for_date' => $this->request_for_date,
