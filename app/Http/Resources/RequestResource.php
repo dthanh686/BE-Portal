@@ -15,11 +15,11 @@ class RequestResource extends JsonResource
     public function toArray($request)
     {
         return[
-            'member_id' => $this->published_date,
+            'member_id' => $this->member_id,
             'request_type' => $this->request_type,
-            'request_for_date' => $this->published_date,
+            'request_for_date' => $this->request_for_date,
             'check_in' => $this->check_in,
-            'check_out' => $this->published_date,
+            'check_out' => $this->check_out,
             'compensation_time' => $this->compensation_time,
             'compensation_date' => $this->compensation_date,
             'leave_all_day' => $this->leave_all_day,
