@@ -17,11 +17,12 @@ class RequestService extends BaseService
         return RequestRepository::class;
     }
 
-    public function getRequestSent() {
+    public function getRequestSent()
+    {
         $requestSent = $this->model()->where('status', 0)
             ->orWhere('manager_confirmed_status', '<>', null)
             ->get();
-            return RequestResource::collection($requestSent);
+        return RequestResource::collection($requestSent);
     }
 
     public function confirm($request, $id)
@@ -49,7 +50,7 @@ class RequestService extends BaseService
             $this->update($id, $data);
 
             if ($status == 1) {
-                $worksheet->note = $worksheet->note.$note[$requestType];
+                $worksheet->note = $worksheet->note . $note[$requestType];
                 $worksheet->save();
             } else {
                 if ($requestType == 1 || $requestType == 4) {
@@ -59,7 +60,7 @@ class RequestService extends BaseService
                 } elseif ($requestType == 2) {
                     $leaveAllDay = $requestSent->leave_all_day;
                     $leaveTime = $requestSent->leave_time;
-                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime) - strtotime('08:00')) / 60) / 480) + 1, 2);
 
                     $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
 
@@ -69,14 +70,13 @@ class RequestService extends BaseService
                 } elseif ($requestType == 3) {
                     $leaveAllDay = $requestSent->leave_all_day;
                     $leaveTime = $requestSent->leave_time;
-                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime) - strtotime('08:00')) / 60) / 480) + 1, 2);
 
                     $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
 
                     $leaveQuota->unpaid_leave = $leaveQuota->unpaid_leave - $timeLeave;
                     $leaveQuota->save();
                 }
-
             }
 
             return response()->json([
@@ -93,11 +93,12 @@ class RequestService extends BaseService
         }
     }
 
-    public function getRequestConfirm() {
+    public function getRequestConfirm()
+    {
         $requestConfirm = $this->model()->where('status', 1)
             ->orWhere('admin_approved_status', '<>', null)
             ->get();
-            return RequestResource::collection($requestConfirm);
+        return RequestResource::collection($requestConfirm);
     }
 
     public function approve($request, $id)
@@ -150,7 +151,7 @@ class RequestService extends BaseService
                 } elseif ($requestType == 2) {
                     $leaveAllDay = $requestConfirm->leave_all_day;
                     $leaveTime = $requestConfirm->leave_time;
-                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime) - strtotime('08:00')) / 60) / 480) + 1, 2);
 
                     $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
 
@@ -160,7 +161,7 @@ class RequestService extends BaseService
                 } elseif ($requestType == 3) {
                     $leaveAllDay = $requestConfirm->leave_all_day;
                     $leaveTime = $requestConfirm->leave_time;
-                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
+                    $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime) - strtotime('08:00')) / 60) / 480) + 1, 2);
 
                     $leaveQuota = LeaveQuota::where('member_id', auth()->id())->where('year', $year)->first();
 
@@ -191,7 +192,7 @@ class RequestService extends BaseService
     {
         $requestForDate = trim($request->request_for_date);
         $requests = $this->model()->where('member_id', auth()->id())->where('request_for_date', $requestForDate);
-        if ($requests->exists()){
+        if ($requests->exists()) {
             return $requests->first();
         } else {
             return response()->json([
@@ -207,5 +208,4 @@ class RequestService extends BaseService
         $query = Request::truncate();
         return $query;
     }
-
 }
