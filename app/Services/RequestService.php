@@ -115,6 +115,7 @@ class RequestService extends BaseService
             $noteConfirm = config('common.note_confirm');
             $errorCount = $requestConfirm->error_count;
             $month = date('Y-m', strtotime($date));
+            $year = date('Y', strtotime($date));
 
             $worksheet = Worksheet::where('member_id', $memberId)->where('work_date', $date)->first();
 
@@ -146,7 +147,6 @@ class RequestService extends BaseService
                     $requestQuota->remain = $requestQuota->remain + 1;
                     $requestQuota->save();
                 } elseif ($requestType == 2) {
-                    $year = date('Y', strtotime($date));
                     $leaveAllDay = $requestConfirm->leave_all_day;
                     $leaveTime = $requestConfirm->leave_time;
                     $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
@@ -157,7 +157,6 @@ class RequestService extends BaseService
                     $leaveQuota->paid_leave =  $leaveQuota->paid_leave - $timeLeave;
                     $leaveQuota->save();
                 } elseif ($requestType == 3) {
-                    $year = date('Y', strtotime($date));
                     $leaveAllDay = $requestConfirm->leave_all_day;
                     $leaveTime = $requestConfirm->leave_time;
                     $leaveAllDay != null ? $timeLeave = 1 : $timeLeave = round((((strtotime($leaveTime)-strtotime('08:00'))/60)/480) +1,2);
@@ -176,7 +175,7 @@ class RequestService extends BaseService
             return response()->json([
                 'status' => true,
                 'code' => 201,
-                'message' => 'Confirm request success!'
+                'message' => 'Approve request success!'
             ], 201);
         } else {
             return response()->json([
