@@ -38,10 +38,10 @@ Route::controller(AuthController::class)->group(function () {
 Route::prefix('worksheet')
     ->controller(WorksheetController::class)
     ->group(function () {
-    Route::get('', 'index');
-    Route::get('/show-id', 'getById');
-    Route::get('/show-date', 'getByDate');
-});
+        Route::get('', 'index');
+        Route::get('/show-id', 'getById');
+        Route::get('/show-date', 'getByDate');
+    });
 
 Route::prefix('register-leave')
     ->controller(RegisterLeaveController::class)
@@ -49,6 +49,7 @@ Route::prefix('register-leave')
         Route::post('/store', 'store');
         Route::get('/show', 'show');
         Route::put('/update/{id}', 'update');
+        Route::delete('/delete/{id}', 'destroy');
     });
 Route::get('/time-log', [ChecklogController::class, 'index']);
 Route::prefix('register-forget')
@@ -57,6 +58,7 @@ Route::prefix('register-forget')
         Route::post('/store', 'store');
         Route::get('/show', 'show');
         Route::put('/update/{id}', 'update');
+        Route::delete('/delete/{id}', 'destroy');
     });
 Route::prefix('members')
     ->controller(MemberController::class)
@@ -65,13 +67,14 @@ Route::prefix('members')
         Route::put('/update', 'update');
     });
 
-Route::apiResource('notification', NotificationController::class)->only('index','show');
+Route::apiResource('notification', NotificationController::class)->only('index', 'show');
 Route::prefix('register-late-early')
     ->controller(RegisterLateEarlyController::class)
     ->group(function () {
         Route::post('/store', 'store');
         Route::get('/show', 'show');
         Route::put('/update/{id}', 'update');
+        Route::delete('/delete/{id}', 'destroy');
     });
 Route::prefix('register-ot')
     ->controller(RegisterOTController::class)
@@ -79,7 +82,8 @@ Route::prefix('register-ot')
         Route::post('/store', 'store');
         Route::get('/show', 'show');
         Route::put('/update/{id}', 'update');
-    });
+        Route::delete('/delete/{id}', 'destroy');
+    }); 
 Route::prefix('request')
     ->controller(RequestController::class)
     ->group(function () {
@@ -99,4 +103,3 @@ Route::prefix('admin')
             Route::post('/store', 'createNotifications');
         });
     });
-

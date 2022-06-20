@@ -66,7 +66,6 @@ class RegisterOTController extends BaseController
      */
     public function edit($id)
     {
-        
     }
 
     /**
@@ -78,7 +77,7 @@ class RegisterOTController extends BaseController
      */
     public function update(RegisterOTRequest $request, $id)
     {
-        return $this->registerOTService->edit($request,$id);
+        return $this->registerOTService->edit($request, $id);
     }
 
     /**
@@ -89,6 +88,6 @@ class RegisterOTController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        return  $this->registerOTService->deleteOT($id);
     }
 }

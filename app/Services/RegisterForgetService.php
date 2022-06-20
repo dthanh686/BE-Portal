@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\MemberRequestQuota;
 use App\Models\Worksheet;
 use App\Repositories\RequestRepository;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterForgetService extends BaseService
 {
@@ -25,10 +26,10 @@ class RegisterForgetService extends BaseService
         $month = date('Y-m', strtotime($requestForDate));
 
         $registerForget = $this->model()->where('member_id', auth()->id())
-                         ->where('request_type', $requestType)
-                         ->where('status', 0)
-                         ->where('request_for_date', $requestForDate)
-                         ->exists();
+            ->where('request_type', $requestType)
+            ->where('status', 0)
+            ->where('request_for_date', $requestForDate)
+            ->exists();
 
         $requestQuota = MemberRequestQuota::where('member_id', auth()->id())->where('month', $month)->first();
         $remain = $requestQuota->remain;
@@ -59,9 +60,9 @@ class RegisterForgetService extends BaseService
                 'member_id' => auth()->id(),
                 'request_type' => $requestType,
                 'request_for_date' => $requestForDate,
-                'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkin)),
-                'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkout)),
-                'reason' =>$reason,
+                'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate . ' ' . $checkin)),
+                'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate . ' ' . $checkout)),
+                'reason' => $reason,
                 'error_count' => $errorCount,
             ];
             $this->create($data);
@@ -73,7 +74,6 @@ class RegisterForgetService extends BaseService
                 'code' => 200,
                 'message' => 'Create request success!'
             ], 200);
-
         }
     }
 
@@ -82,11 +82,9 @@ class RegisterForgetService extends BaseService
         $requestForDate = trim($request->request_for_date);
         $registerForget = $this->model()->where('member_id', auth()->id())
             ->where('request_type', 1)
-            // ->where('status', 0)
             ->where('request_for_date', $requestForDate);
         if ($registerForget->exists()) {
             return $registerForget->first();
-
         } else {
             return response()->json([
                 'status' => false,
@@ -111,9 +109,9 @@ class RegisterForgetService extends BaseService
                 'member_id' => auth()->id(),
                 'request_type' => $requestType,
                 'request_for_date' => $requestForDate,
-                'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkin)),
-                'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate.' '.$checkout)),
-                'reason' =>$reason,
+                'check_in' => date('Y-m-d H:i:s', strtotime($requestForDate . ' ' . $checkin)),
+                'check_out' => date('Y-m-d H:i:s', strtotime($requestForDate . ' ' . $checkout)),
+                'reason' => $reason,
                 'error_count' => $errorCount,
 
             ];
@@ -131,5 +129,31 @@ class RegisterForgetService extends BaseService
                 'message' => 'Fail',
             ], 403);
         }
-     }
+    }
+
+    public function deleteLateEarly($id)
+    {
+        $registerForget = $this->model()->where('member_id', auth()->id())->where('request_type', 1)->find($id);
+
+        if ($registerForget) {
+
+            $this->delete($id);
+            $month = date('Y-m', strtotime($registerForget->request_for_date));
+            $requestQuota = MemberRequestQuota::where('member_id', auth()->id())->where('month', $month)->first();
+            $requestQuota->remain = $requestQuota->remain + 1;
+            $requestQuota->save();
+
+            return response()->json([
+                'status' => true,
+                'code' => 201,
+                'message' => 'Delete request success!'
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+                'error' => 'This request is not available yet'
+            ], 403);
+        }
+    }
 }

@@ -129,4 +129,23 @@ class RegisterOTService extends BaseService
             ], 403);
         }
     }
+
+    public function deleteOT($id)
+    {
+        $registerOT = $this->model()->where('member_id', Auth::id())->where('request_type', 5)->find($id);
+        if ($registerOT) {
+            $this->delete($id);
+            return response()->json([
+                'status' => true,
+                'code' => 201,
+                'message' => 'Delete request success!'
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+                'error' => 'This request is not available yet'
+            ], 403);
+        }
+    }
 }

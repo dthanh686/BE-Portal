@@ -89,6 +89,7 @@ class RegisterForgetController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        return $this->registerForgetService->deleteLateEarly($id);
     }
 }
+

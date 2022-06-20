@@ -87,6 +87,6 @@ class RegisterLateEarlyController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        return $this->registerLateEarlyService->deleteLateEarly($id);
     }
 }

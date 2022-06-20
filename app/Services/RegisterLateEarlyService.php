@@ -126,4 +126,30 @@ class   RegisterLateEarlyService extends BaseService
             ], 403);
         }
     }
+
+    public function deleteLateEarly($id)
+    {
+        $registerLateEarly = $this->model()->where('member_id', Auth::id())->where('request_type', 4)->find($id);
+
+        if ($registerLateEarly) {
+
+            $this->delete($id);
+            $month = date('Y-m', strtotime($registerLateEarly->request_for_date));
+            $requestQuota = MemberRequestQuota::where('member_id', Auth::id())->where('month', $month)->first();
+            $requestQuota->remain = $requestQuota->remain + 1;
+            $requestQuota->save();
+
+            return response()->json([
+                'status' => true,
+                'code' => 201,
+                'message' => 'Delete request success!'
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+                'error' => 'This request is not available yet'
+            ], 403);
+        }
+    }
 }

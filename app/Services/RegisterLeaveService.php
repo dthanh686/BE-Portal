@@ -198,4 +198,30 @@ class RegisterLeaveService extends BaseService
             ], 403);
         }
     }
+
+    public function deleteLeave($id)
+    {
+        $registerLeave = $this->model()->where('member_id', auth()->id())->where('request_type', 4)->find($id);
+
+        if ($registerLeave) {
+
+            $this->delete($id);
+            $month = date('Y-m', strtotime($registerLeave->request_for_date));
+            $requestQuota = MemberRequestQuota::where('member_id', auth()->id())->where('month', $month)->first();
+            $requestQuota->remain = $requestQuota->remain + 1;
+            $requestQuota->save();
+
+            return response()->json([
+                'status' => true,
+                'code' => 201,
+                'message' => 'Delete request success!'
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+                'error' => 'This request is not available yet'
+            ], 403);
+        }
+    }
 }
