@@ -36,6 +36,7 @@ class RequestResource extends JsonResource
             'admin_approved_status' => $this->admin_approved_status,
             'admin_approved_at' => $this->admin_approved_at,
             'admin_approved_comment' => $this->admin_approved_comment,
+            'created_at' => $this->created_at,
             'error_count' => $this->error_count,
             'full_name' => $this->member->full_name,
             'email' => $this->member->email,

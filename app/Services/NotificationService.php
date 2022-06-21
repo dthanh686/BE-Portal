@@ -19,14 +19,13 @@ class NotificationService extends BaseService
 
     public function store($data)
     {
-
         $notifications = Notification::create($data->all());
+
         if ($data->hasFile('attachment')) {
             $newFileName = uniqid() . '-' . $data->attachment->getClientOriginalName();
             $filePath = $data->attachment->storeAs(config('common.default_file_path') . 'notifications', $newFileName);
             $notifications->attachment = 'http://54.179.42.101/storage' . str_replace('public', '', $filePath);
         }
-
         $notifications->save();
 
         return response()->json([
