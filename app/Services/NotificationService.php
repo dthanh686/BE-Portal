@@ -17,9 +17,11 @@ class NotificationService extends BaseService
         return NotificationRepository::class;
     }
 
-    public function listNoticeAdmin()
+    public function listNoticeAdmin($request)
     {
-        $notifications = $this->model()->where('status', 0)->get();
+        $perPage = $request->get('per_page') ?? config('common.default_page_size');
+        $notifications = $this->model()->where('status', 0)->paginate($perPage);
+        
         return NotificationResource::collection($notifications);
     }
     public function updateNoticeAdmin($request, $id)
@@ -43,7 +45,6 @@ class NotificationService extends BaseService
                 'error' => 'This request is not available yet'
             ], 403);
         }
-        
     }
 
     public function store($data)

@@ -36,9 +36,9 @@ class AdminController extends BaseController
         return $this->notificationService->store($request);
     }
 
-    public function listNotifications()
+    public function listNotifications(Request $request)
     {
-        return $this->notificationService->listNoticeAdmin();
+        return $this->notificationService->listNoticeAdmin($request);
     }
 
     public function updateStatusNotice(Request $request, $id)
