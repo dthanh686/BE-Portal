@@ -24,7 +24,14 @@ class AuthController extends BaseController
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }
-        return $this->createNewToken($token);
+        return response()->json([
+            'status' => 'success',
+            'code' => JsonResponse::HTTP_OK,
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'data' => new MemberResource(auth()->user()->load(['roles', 'divisions', 'shifts'])),
+        ], JsonResponse::HTTP_OK);
     }
 
     public function logout(Request $request)
