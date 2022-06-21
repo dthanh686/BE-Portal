@@ -21,7 +21,7 @@ class NotificationService extends BaseService
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
         $notifications = $this->model()->where('status', 0)->paginate($perPage);
-        
+
         return NotificationResource::collection($notifications);
     }
     public function updateNoticeAdmin($request, $id)
@@ -71,7 +71,7 @@ class NotificationService extends BaseService
 
         $divisionId = Member::where('id', auth()->id())->with('divisions')->first();
         $divisionId = $divisionId->divisions->first()->id;
-        $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"])->where('status', 3);
+        $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"]);
         $orderBy = $request->get('sort');
         if ($orderBy) {
             $query->orderBy('published_date', $orderBy);
