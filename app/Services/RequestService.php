@@ -19,9 +19,7 @@ class RequestService extends BaseService
 
     public function getRequestSent()
     {
-        $requestSent = $this->model()->where('status', 0)
-            ->orWhere('manager_confirmed_status', -1)
-            ->orWhere('manager_confirmed_status', 1)
+        $requestSent = $this->model()->where('status', '<>', 2)
             ->get();
         return RequestResource::collection($requestSent);
     }
@@ -96,9 +94,8 @@ class RequestService extends BaseService
 
     public function getRequestConfirm()
     {
-        $requestConfirm = $this->model()->where('status', 1)
-            ->orWhere('admin_approved_status', -1)
-            ->orWhere('admin_approved_status', 2)
+        $requestConfirm = $this->model()->where('status','<>', 0)
+            ->where('admin_confirmed_status', '<>',-1)
             ->get();
         return RequestResource::collection($requestConfirm);
     }
