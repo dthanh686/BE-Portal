@@ -19,7 +19,7 @@ class NotificationService extends BaseService
 
     public function listNoticeAdmin()
     {
-        $notifications = $this->model()->where('status', 2)->get();
+        $notifications = $this->model()->where('status', 0)->get();
         return NotificationResource::collection($notifications);
     }
     public function updateNoticeAdmin($request, $id)
