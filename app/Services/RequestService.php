@@ -95,7 +95,7 @@ class RequestService extends BaseService
     public function getRequestConfirm()
     {
         $requestConfirm = $this->model()->where('status','<>', 0)
-            ->where('admin_confirmed_status', '<>',-1)
+            ->where('manager_confirmed_status', '<>',-1)
             ->get();
         return RequestResource::collection($requestConfirm);
     }
