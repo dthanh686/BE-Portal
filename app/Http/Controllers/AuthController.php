@@ -24,10 +24,7 @@ class AuthController extends BaseController
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }
-        return response()->json([
-            $this->createNewToken($token),
-            $this->refreshToken(auth()->refresh()),
-        ], JsonResponse::HTTP_OK);
+        return $this->createNewToken($token);
     }
 
     public function logout(Request $request)
@@ -40,27 +37,18 @@ class AuthController extends BaseController
 
     protected function createNewToken($token)
     {
-        return [
+        return response()->json([
             'status' => 'success',
-            'code' => 200,
+            'code' => JsonResponse::HTTP_OK,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
             'data' => new MemberResource(auth()->user()->load(['roles', 'divisions', 'shifts'])),
-        ];
-    }
-
-    protected function refreshToken($token)
-    {
-        return [
-            'refresh_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 120,
-        ];
+        ], JsonResponse::HTTP_OK);
     }
 
     public function refresh() {
-        return $this->refreshToken(auth()->refresh());
+        return $this->createNewToken(auth()->refresh());
     }
 
 
