@@ -13,7 +13,7 @@ class AdminController extends BaseController
 {
     protected $requestService;
     protected $notificationService;
-    public function __construct(RequestService $requestService,NotificationService $notificationService)
+    public function __construct(RequestService $requestService, NotificationService $notificationService)
     {
         parent::__construct();
         $this->middleware('auth.admin');
@@ -34,5 +34,15 @@ class AdminController extends BaseController
     public function createNotifications(NotificationRequest $request)
     {
         return $this->notificationService->store($request);
+    }
+
+    public function listNotifications()
+    {
+        return $this->notificationService->listNoticeAdmin();
+    }
+
+    public function updateStatusNotice(NotificationRequest $request, $id)
+    {
+        return $this->notificationService->updateNoticeAdmin($request, $id);
     }
 }

@@ -17,6 +17,35 @@ class NotificationService extends BaseService
         return NotificationRepository::class;
     }
 
+    public function listNoticeAdmin()
+    {
+        $notifications = $this->model()->where('status', 2)->get();
+        return NotificationResource::collection($notifications);
+    }
+    public function updateNoticeAdmin($request, $id)
+    {
+        $notice = $this->findOrFail($id);
+        $status = $request->status;
+        if ($notice->status === 0) {
+            $data = [
+                'status' => $status,
+            ];
+            $this->update($id, $data);
+            return response()->json([
+                'status' => true,
+                'code' => 201,
+                'message' => 'Confirm request success!'
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+                'error' => 'This request is not available yet'
+            ], 403);
+        }
+        
+    }
+
     public function store($data)
     {
         $notifications = Notification::create($data->all());
@@ -41,7 +70,7 @@ class NotificationService extends BaseService
 
         $divisionId = Member::where('id', auth()->id())->with('divisions')->first();
         $divisionId = $divisionId->divisions->first()->id;
-        $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"]);
+        $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"])->where('status', 3);
         $orderBy = $request->get('sort');
         if ($orderBy) {
             $query->orderBy('published_date', $orderBy);

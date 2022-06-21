@@ -101,5 +101,7 @@ Route::prefix('admin')
         });
         Route::prefix('notifications')->group(function () {
             Route::post('/store', 'createNotifications');
+            Route::get('/list','listNotifications');
+            Route::put('/update/{id}','updateStatusNotice');
         });
     });
