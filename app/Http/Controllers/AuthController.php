@@ -25,12 +25,8 @@ class AuthController extends BaseController
             );
         }
         return response()->json([
-            'status' => 'success',
-            'code' => JsonResponse::HTTP_OK,
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'data' => new MemberResource(auth()->user()->load(['roles', 'divisions', 'shifts'])),
+            $this->createNewToken($token),
+            $this->refreshToken(auth()->refresh()),
         ], JsonResponse::HTTP_OK);
     }
 
@@ -44,18 +40,27 @@ class AuthController extends BaseController
 
     protected function createNewToken($token)
     {
-        return response()->json([
+        return [
             'status' => 'success',
-            'code' => JsonResponse::HTTP_OK,
+            'code' => 200,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
             'data' => new MemberResource(auth()->user()->load(['roles', 'divisions', 'shifts'])),
-        ], JsonResponse::HTTP_OK);
+        ];
+    }
+
+    protected function refreshToken($token)
+    {
+        return [
+            'refresh_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 120,
+        ];
     }
 
     public function refresh() {
-        return $this->createNewToken(auth()->refresh());
+        return $this->refreshToken(auth()->refresh());
     }
 
 
