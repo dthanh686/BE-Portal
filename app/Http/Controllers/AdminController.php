@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ApproveRequest;
 use App\Http\Requests\NotificationRequest;
 use App\Http\Resources\RequestResource;
+use App\Services\MemberShiftService;
 use App\Services\NotificationService;
 use App\Services\RequestService;
 use Illuminate\Http\Request;
@@ -13,12 +14,14 @@ class AdminController extends BaseController
 {
     protected $requestService;
     protected $notificationService;
-    public function __construct(RequestService $requestService, NotificationService $notificationService)
+    protected $memberShiftService;
+    public function __construct(MemberShiftService $memberShiftService, RequestService $requestService, NotificationService $notificationService)
     {
         parent::__construct();
         $this->middleware('auth.admin');
         $this->requestService = $requestService;
         $this->notificationService = $notificationService;
+        $this->memberShiftService = $memberShiftService;
     }
 
     public function index()
@@ -44,5 +47,15 @@ class AdminController extends BaseController
     public function updateStatusNotice(Request $request, $id)
     {
         return $this->notificationService->updateNoticeAdmin($request, $id);
+    }
+
+    public function listMemberShift(Request $request)
+    {
+        return $this->memberShiftService->listMemberShift($request);
+    }
+
+    public function updateMemberShift(Request $request, $id)
+    {
+        return $this->memberShiftService->updateShift($request, $id);
     }
 }

@@ -69,8 +69,9 @@ class NotificationService extends BaseService
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
 
-        $divisionId = Member::where('id', auth()->id())->with('divisions')->first();
-        $divisionId = $divisionId->divisions->first()->id;
+        $member = Member::where('id', auth()->id())->with('divisions')->first();
+        $divisionId = $member->divisions->first()->id;
+       
         $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"]);
         $orderBy = $request->get('sort');
         if ($orderBy) {

@@ -40,7 +40,7 @@ class RequestResource extends JsonResource
             'error_count' => $this->error_count,
             'full_name' => $this->member->full_name,
             'email' => $this->member->email,
-            'division_name' => $this->member->with('divisions')->first()->divisions->first()->division_name,
+            'division_name' => $this->member->divisions->first()->division_name,
         ];
     }
 }

@@ -104,4 +104,8 @@ Route::prefix('admin')
             Route::get('/list','listNotifications');
             Route::put('/update/{id}','updateStatusNotice');
         });
+        Route::prefix('shift')->group(function () {
+            Route::get('/list','listMemberShift');
+            Route::put('/update/{id}','updateMemberShift');
+        });
     });
