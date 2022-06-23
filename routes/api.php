@@ -103,6 +103,7 @@ Route::prefix('admin')
             Route::post('/store', 'createNotifications');
             Route::get('/list','listNotifications');
             Route::put('/update/{id}','updateStatusNotice');
+            Route::delete('/delete/{id}','deleteNotifications');
         });
         Route::prefix('shift')->group(function () {
             Route::get('/list','listMemberShift');

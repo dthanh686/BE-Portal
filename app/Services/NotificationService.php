@@ -20,7 +20,7 @@ class NotificationService extends BaseService
     public function listNoticeAdmin($request)
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
-        $notifications = $this->model()->where('status', 0)->paginate($perPage);
+        $notifications = $this->model()->paginate($perPage);
 
         return NotificationResource::collection($notifications);
     }
@@ -104,4 +104,24 @@ class NotificationService extends BaseService
             ], 403);
         }
     }
+
+    public function deleteNotice($id)
+    {
+        $notice = $this->model()->find($id);
+        if ($notice) {
+            $this->delete($id);
+            return response()->json([
+                'status' => true,
+                'code' => 201,
+                'message' => 'Delete notice success!'
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+                'error' => 'This request is not available yet'
+            ], 403);
+        }
+    }
+
 }

@@ -49,6 +49,11 @@ class AdminController extends BaseController
         return $this->notificationService->updateNoticeAdmin($request, $id);
     }
 
+    public function deleteNotifications($id)
+    {
+        return $this->notificationService->deleteNotice($id);
+    }
+
     public function listMemberShift(Request $request)
     {
         return $this->memberShiftService->listMemberShift($request);
@@ -58,4 +63,6 @@ class AdminController extends BaseController
     {
         return $this->memberShiftService->updateShift($request, $id);
     }
+
+    
 }

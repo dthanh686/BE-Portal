@@ -34,7 +34,7 @@ class Notification extends Model
         if ($this->attributes['published_to'] !== '["all"]') {
             $publishedTo = json_decode($this->attributes['published_to']);
 
-            return Division::select('division_name')->whereIn('id', $publishedTo)->get();
+            return Division::select('division_name','id')->whereIn('id', $publishedTo)->get();
         }
 
         return $this->attributes['published_to'];

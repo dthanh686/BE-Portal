@@ -28,6 +28,8 @@ class NotificationResource extends JsonResource
             'author_email' => $this->authorInfo->email,
             'author_other_email' => $this->authorInfo->other_email,
             'author_phone' => $this->authorInfo->phone,
-        ];
+        //     'division_name' => $this->authorInfo->divisions->first()->division_name,
+        //     'id_divison' => $this->authorInfo->divisions->first()->id,
+         ];
     }
 }
