@@ -21,7 +21,7 @@ class NotificationFactory extends Factory
             'published_date' => $this->faker->date(),
             'subject' => 'Thông báo chuyển văn phòng lần thứ' . $i++ ,
             'status' => rand(0, 3),
-            'attachment' => 'http://54.179.42.101/storage/file/notifications/62a9ef604a1d2-Relipa_Portal_Database_Detail.xlsx',
+            'attachment' => 'http://18.141.177.206/storage/file/notifications/62a9ef604a1d2-Relipa_Portal_Database_Detail.xlsx',
             'published_to' => json_encode([$this->faker->randomElement($divionId)]),
             'created_by' => $this->faker->randomElement($createBy),
             'message' => 'Tất cả được nghỉ làm 1 năm(Vẫn nhận lương như bình thường)',

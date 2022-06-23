@@ -21,7 +21,7 @@ class MemberFactory extends Factory
             'member_code' => $this->faker->randomElement(['CTV-', 'D1-', 'D2-', 'D5-', 'G6-', 'HR-', 'ADMIN-', 'NS-']
                 ) . $random,
             'email' => 'test' . $random++ . '@gmail.com',
-            'avatar' => 'http://127.0.0.1:8000/storage/avatar/avatar.png',
+            'avatar' => 'http://18.141.177.206/storage/avatar/avatar.png',
             'password' => Hash::make('123456'), // password
             'created_by' => 1,
         ];

@@ -20,7 +20,7 @@ class NotificationService extends BaseService
     public function listNoticeAdmin($request)
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
-        $notifications = $this->model()->paginate($perPage);
+        $notifications = $this->model()->where('status',1)->paginate($perPage);
 
         return NotificationResource::collection($notifications);
     }
@@ -54,7 +54,7 @@ class NotificationService extends BaseService
         if ($data->hasFile('attachment')) {
             $newFileName = uniqid() . '-' . $data->attachment->getClientOriginalName();
             $filePath = $data->attachment->storeAs(config('common.default_file_path') . 'notifications', $newFileName);
-            $notifications->attachment = 'http://54.179.42.101/storage' . str_replace('public', '', $filePath);
+            $notifications->attachment = 'http://18.141.177.206/storage' . str_replace('public', '', $filePath);
         }
         $notifications->save();
 

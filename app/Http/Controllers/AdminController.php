@@ -8,6 +8,7 @@ use App\Http\Resources\RequestResource;
 use App\Services\MemberShiftService;
 use App\Services\NotificationService;
 use App\Services\RequestService;
+use App\Services\ShiftService;
 use Illuminate\Http\Request;
 
 class AdminController extends BaseController
@@ -15,13 +16,15 @@ class AdminController extends BaseController
     protected $requestService;
     protected $notificationService;
     protected $memberShiftService;
-    public function __construct(MemberShiftService $memberShiftService, RequestService $requestService, NotificationService $notificationService)
+    protected $shiftService;
+    public function __construct(ShiftService $shiftService,MemberShiftService $memberShiftService, RequestService $requestService, NotificationService $notificationService)
     {
         parent::__construct();
         $this->middleware('auth.admin');
         $this->requestService = $requestService;
         $this->notificationService = $notificationService;
         $this->memberShiftService = $memberShiftService;
+        $this->shiftService = $shiftService;
     }
 
     public function index()
@@ -64,5 +67,9 @@ class AdminController extends BaseController
         return $this->memberShiftService->updateShift($request, $id);
     }
 
+    public function listShift()
+    {
+        return $this->shiftService->listShift();
+    }
     
 }
