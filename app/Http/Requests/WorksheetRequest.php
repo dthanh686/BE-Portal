@@ -42,7 +42,7 @@ class WorksheetRequest extends FormRequest
             'per_page'=> [
                 'nullable',
                 'numeric',
-                Rule::in([30, 50, 100]),
+                // Rule::in([30, 50, 100]),
             ]
         ];
     }

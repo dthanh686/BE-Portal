@@ -20,9 +20,14 @@ class NotificationService extends BaseService
     public function listNoticeAdmin($request)
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
-        $notifications = $this->model()->where('status',1)->paginate($perPage);
-
-        return NotificationResource::collection($notifications);
+        $notifications = $this->model()->where('status', 1);
+        $orderBy = $request->get('sort');
+        if ($orderBy) {
+            $notifications->orderBy('published_date', $orderBy);
+        } else {
+            $notifications->orderBy('published_date', 'desc');
+        }
+        return NotificationResource::collection($notifications->paginate($perPage));
     }
     public function updateNoticeAdmin($request, $id)
     {
@@ -54,7 +59,7 @@ class NotificationService extends BaseService
         if ($data->hasFile('attachment')) {
             $newFileName = uniqid() . '-' . $data->attachment->getClientOriginalName();
             $filePath = $data->attachment->storeAs(config('common.default_file_path') . 'notifications', $newFileName);
-            $notifications->attachment = 'http://18.141.177.206/storage' . str_replace('public', '', $filePath);
+            $notifications->attachment = 'http://13.229.72.31/storage' . str_replace('public', '', $filePath);
         }
         $notifications->save();
 
@@ -71,11 +76,13 @@ class NotificationService extends BaseService
 
         $member = Member::where('id', auth()->id())->with('divisions')->first();
         $divisionId = $member->divisions->first()->id;
-       
+
         $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"]);
         $orderBy = $request->get('sort');
         if ($orderBy) {
             $query->orderBy('published_date', $orderBy);
+        } else {
+            $query->orderBy('published_date', 'desc');
         }
 
         return $query->paginate($perPage);
@@ -123,5 +130,4 @@ class NotificationService extends BaseService
             ], 403);
         }
     }
-
 }

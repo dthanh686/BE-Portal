@@ -27,9 +27,9 @@ class AdminController extends BaseController
         $this->shiftService = $shiftService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->requestService->getRequestConfirm();
+        return $this->requestService->getRequestConfirm($request);
     }
 
     public function update(ApproveRequest $request, $id)
