@@ -23,9 +23,9 @@ class RequestController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->requestService->getRequestSent();
+        return $this->requestService->getRequestSent($request);
     }
 
     /**

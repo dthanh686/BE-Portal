@@ -17,9 +17,9 @@ class RequestService extends BaseService
         return RequestRepository::class;
     }
 
-    public function getRequestSent()
+    public function getRequestSent($request)
     {
-        $requestSent = $this->model()->where('status', '<>', 2)
+        $requestSent = $this->model()->where('status', '<>', 2)->orderBy('created_at', 'desc')
             ->get();
         return RequestResource::collection($requestSent);
     }
@@ -92,9 +92,10 @@ class RequestService extends BaseService
         }
     }
 
-    public function getRequestConfirm()
+    public function getRequestConfirm($request)
     {
         $requestConfirm = $this->model()->where('status','<>', 0)
+            ->orderBy('created_at', 'desc')
             ->where('manager_confirmed_status', '<>',-1)
             ->get();
         return RequestResource::collection($requestConfirm);
