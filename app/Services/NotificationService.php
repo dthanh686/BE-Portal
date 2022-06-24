@@ -20,7 +20,7 @@ class NotificationService extends BaseService
     public function listNoticeAdmin($request)
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
-        $notifications = $this->model()->where('status',1)->paginate($perPage);
+        $notifications = $this->model()->where('status', 1)->paginate($perPage);
 
         return NotificationResource::collection($notifications);
     }
@@ -71,11 +71,13 @@ class NotificationService extends BaseService
 
         $member = Member::where('id', auth()->id())->with('divisions')->first();
         $divisionId = $member->divisions->first()->id;
-       
+
         $query = Notification::orWhereJsonContains('published_to', [$divisionId])->orWhereJsonContains('published_to', ["all"]);
         $orderBy = $request->get('sort');
         if ($orderBy) {
             $query->orderBy('published_date', $orderBy);
+        } else {
+            $query->orderBy('published_date', 'desc');
         }
 
         return $query->paginate($perPage);
@@ -123,5 +125,4 @@ class NotificationService extends BaseService
             ], 403);
         }
     }
-
 }
