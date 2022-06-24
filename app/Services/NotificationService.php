@@ -20,9 +20,14 @@ class NotificationService extends BaseService
     public function listNoticeAdmin($request)
     {
         $perPage = $request->get('per_page') ?? config('common.default_page_size');
-        $notifications = $this->model()->where('status', 1)->paginate($perPage);
-
-        return NotificationResource::collection($notifications);
+        $notifications = $this->model()->where('status', 1);
+        $orderBy = $request->get('sort');
+        if ($orderBy) {
+            $notifications->orderBy('published_date', $orderBy);
+        } else {
+            $notifications->orderBy('published_date', 'desc');
+        }
+        return NotificationResource::collection($notifications->paginate($perPage));
     }
     public function updateNoticeAdmin($request, $id)
     {
