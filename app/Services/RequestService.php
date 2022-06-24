@@ -50,6 +50,7 @@ class RequestService extends BaseService
 
             if ($status == 1) {
                 $worksheet->note = $worksheet->note . $note[$requestType];
+                $worksheet->note =  trim($worksheet->note, '|');
                 $worksheet->save();
             } else {
                 if ($requestType == 1 || $requestType == 4) {
@@ -131,7 +132,8 @@ class RequestService extends BaseService
 
             $this->update($id, $data);
             if ($status === 2) {
-                $worksheet->note = str_replace($noteConfirm[$requestType], $noteApprove[$requestType], $worksheet->note);
+                $worksheet->note = str_replace(trim($noteConfirm[$requestType], '|'), trim($noteApprove[$requestType], '|'), $worksheet->note);
+                $worksheet->note =  trim($worksheet->note, '|');
                 $worksheet->save();
                 if ($errorCount != 0) {
                     $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
