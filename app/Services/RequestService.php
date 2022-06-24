@@ -114,6 +114,7 @@ class RequestService extends BaseService
             $requestType = $requestConfirm->request_type;
             $noteApprove = config('common.note_approve');
             $noteConfirm = config('common.note_confirm');
+            $noteReject = config('common.note_reject');
             $errorCount = $requestConfirm->error_count;
             $month = date('Y-m', strtotime($date));
             $year = date('Y', strtotime($date));
@@ -140,7 +141,7 @@ class RequestService extends BaseService
                     $worksheet->save();
                 }
             } else {
-                $worksheet->note = str_replace($noteConfirm[$requestType], '', $worksheet->note);
+                $worksheet->note = str_replace($noteConfirm[$requestType], $noteReject[$requestType], $worksheet->note);
                 $worksheet->save();
                 if ($requestType == 1) {
                     $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
