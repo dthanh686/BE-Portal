@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Checklog extends Model
 {
-    use HasFactory;
+    use HasFactory; 
 
     protected $table = 'check_logs';
     public $timestamps = false;
