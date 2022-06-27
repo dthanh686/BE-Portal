@@ -25,6 +25,7 @@ return [
         4 => 'Late/Early Reject',
         5 => 'OT Reject',
     ],
+    'url_storage' => 'http://13.215.174.125/storage',
 ]
 
 ?>
