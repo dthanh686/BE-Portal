@@ -59,7 +59,7 @@ class NotificationService extends BaseService
         if ($data->hasFile('attachment')) {
             $newFileName = uniqid() . '-' . $data->attachment->getClientOriginalName();
             $filePath = $data->attachment->storeAs(config('common.default_file_path') . 'notifications', $newFileName);
-            $notifications->attachment = 'http://13.229.72.31/storage' . str_replace('public', '', $filePath);
+            $notifications->attachment = config('common.url_storage') . str_replace('public', '', $filePath);
         }
         $notifications->save();
 
