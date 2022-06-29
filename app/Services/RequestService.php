@@ -34,6 +34,7 @@ class RequestService extends BaseService
             $date = $requestSent->request_for_date;
             $requestType = $requestSent->request_type;
             $note = config('common.note_confirm');
+            $noteReject = config('common.note_reject');
             $month = date('Y-m', strtotime($date));
             $year = date('Y', strtotime($date));
 
@@ -53,6 +54,8 @@ class RequestService extends BaseService
                 $worksheet->note =  trim($worksheet->note, '|');
                 $worksheet->save();
             } else {
+                $worksheet->note = $worksheet->note . $noteReject[$requestType];
+                $worksheet->save();
                 if ($requestType == 1 || $requestType == 4) {
                     $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
                     $requestQuota->remain = $requestQuota->remain + 1;
