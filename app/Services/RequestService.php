@@ -147,7 +147,7 @@ class RequestService extends BaseService
                     $worksheet->save();
                 }
             } else {
-                $worksheet->note = str_replace($noteConfirm[$requestType], $noteReject[$requestType], $worksheet->note);
+                $worksheet->note = str_replace(trim($noteConfirm[$requestType], '|'), trim($noteReject[$requestType], '|'), $worksheet->note);
                 $worksheet->save();
                 if ($requestType == 1) {
                     $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
