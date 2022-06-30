@@ -156,7 +156,7 @@ class RegisterLeaveService extends BaseService
                 'leave_start' => $leaveAllDay != null ? null : $leaveStart,
                 'leave_end' => $leaveAllDay != null ? null : $leaveEnd,
                 'leave_time' => $leaveAllDay != null ? null : $leaveTime,
-                'status' => 1,
+                'status' => 0,
             ];
 
             $dataLeave = [
