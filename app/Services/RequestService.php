@@ -142,8 +142,8 @@ class RequestService extends BaseService
                     $requestQuota = MemberRequestQuota::where('member_id', $memberId)->where('month', $month)->first();
                     $requestQuota->remain = $requestQuota->remain + 1;
                     $requestQuota->save();
-                    $worksheet->checkin = $checkIn;
-                    $worksheet->checkout = $checkOut;
+                    $worksheet->check_in = $checkIn;
+                    $worksheet->check_out = $checkOut;
                     $worksheet->save();
                 }
             } else {
